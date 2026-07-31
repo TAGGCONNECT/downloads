@@ -1,6 +1,6 @@
 const pagamento = {
 
-beneficiario:"CAFÉ Aroma",
+beneficiario:"CAFE Aroma",
 
 tipo:"TELEFONE",
 
