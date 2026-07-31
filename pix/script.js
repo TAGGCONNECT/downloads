@@ -4,7 +4,7 @@ beneficiario:"TAGG Connect",
 
 tipo:"TELEFONE",
 
-chave:"(88) 9.2180-1646",
+chave:"88 9.2180-1646",
 
 banco:"Banco do Brasil",
 
