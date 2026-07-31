@@ -1,6 +1,6 @@
 const pagamento = {
 
-beneficiario:"TAGG Connect",
+beneficiario:"CAFÉ Aroma",
 
 tipo:"TELEFONE",
 
