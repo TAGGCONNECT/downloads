@@ -22,12 +22,3 @@ botao.innerHTML='<i class="fa-solid fa-check"></i>';
 
 mensagem.innerText="Senha copiada! Agora abra as configurações de Wi-Fi do seu celular para conectar.";
 
-setTimeout(()=>{
-
-botao.innerHTML='<i class="fa-regular fa-copy"></i>';
-
-mensagem.innerText="";
-
-},2000);
-
-}
