@@ -20,7 +20,7 @@ const botao=document.getElementById("copiar");
 
 botao.innerHTML='<i class="fa-solid fa-check"></i>';
 
-mensagem.innerText="Senha copiada!<br>Agora abra as configurações de Wi-Fi do seu celular para conectar.";
+mensagem.innerText="Senha copiada! Agora abra as configurações de Wi-Fi do seu celular para conectar.";
 
 setTimeout(()=>{
 
