@@ -1,1 +1,69 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
 
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Wi-Fi</title>
+
+<link rel="stylesheet" href="style.css">
+
+<script src="script.js" defer></script>
+
+</head>
+
+<body>
+
+<div class="container">
+
+<div class="icon">
+📶
+</div>
+
+<h1>Conecte-se ao Wi-Fi</h1>
+
+<p class="subtitle">
+Copie nossa senha para se conectar ao Wi-Fi.
+</p>
+
+<div class="card">
+
+<div class="campo">
+
+<span>Nome da Rede</span>
+
+<strong id="rede"></strong>
+
+</div>
+
+<div class="campo">
+
+<span>Senha</span>
+
+<div class="wifi-area">
+
+<input
+type="text"
+id="senha"
+readonly>
+
+<button onclick="copiarSenha()">
+
+Copiar
+
+</button>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</body>
+
+</html>
