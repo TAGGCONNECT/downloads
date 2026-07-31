@@ -1,8 +1,8 @@
 const wifi={
 
-rede:"CAFE_AROMA",
+rede:"BARBEARIA_PRIME",
 
-senha:"Cafe2026@"
+senha:"Barba2026@"
 
 };
 
