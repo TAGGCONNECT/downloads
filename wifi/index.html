@@ -4,12 +4,14 @@
 <head>
 
 <meta charset="UTF-8">
-
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Wi-Fi</title>
+<title>Conecte-se ao Wi-Fi</title>
 
 <link rel="stylesheet" href="style.css">
+
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 
 <script src="script.js" defer></script>
 
@@ -19,40 +21,41 @@
 
 <div class="container">
 
-<div class="icon">
-📶
+<div class="wifi-icon">
+
+<i class="fa-solid fa-wifi"></i>
+
 </div>
 
 <h1>Conecte-se ao Wi-Fi</h1>
 
-<p class="subtitle">
-Copie nossa senha para se conectar ao Wi-Fi.
+<p class="descricao">
+Copie nossa senha para acessar a rede.
 </p>
-
-<div class="card">
 
 <div class="campo">
 
-<span>Nome da Rede</span>
+<label>Rede Wi-Fi</label>
 
-<strong id="rede"></strong>
+<div class="caixa">
+
+<span id="rede"></span>
+
+</div>
 
 </div>
 
 <div class="campo">
 
-<span>Senha</span>
+<label>Senha de acesso</label>
 
-<div class="wifi-area">
+<div class="caixa senha">
 
-<input
-type="text"
-id="senha"
-readonly>
+<span id="senha"></span>
 
-<button onclick="copiarSenha()">
+<button id="copiar" onclick="copiarSenha()">
 
-Copiar
+<i class="fa-regular fa-copy"></i>
 
 </button>
 
@@ -60,7 +63,7 @@ Copiar
 
 </div>
 
-</div>
+<p id="mensagem"></p>
 
 </div>
 
