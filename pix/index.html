@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pagamento via PIX</title>
+
+    <link rel="stylesheet" href="style.css">
+
+    <script src="script.js" defer></script>
+</head>
+
+<body>
+
+<div class="container">
+
+    <div class="icon">
+        💳
+    </div>
+
+    <h1>Pagamento via PIX</h1>
+
+    <p class="subtitle">
+        Confira os dados antes de realizar a transferência.
+    </p>
+
+    <div class="card">
+
+        <div class="campo">
+            <span>Beneficiário</span>
+            <strong id="beneficiario"></strong>
+        </div>
+
+        <div class="campo">
+            <span>Tipo da chave</span>
+            <strong id="tipo"></strong>
+        </div>
+
+        <div class="campo">
+            <span>Chave PIX</span>
+
+            <div class="pix-area">
+
+                <input
+                    type="text"
+                    id="chave"
+                    readonly>
+
+                <button onclick="copiarPix()">
+                    Copiar
+                </button>
+
+            </div>
+
+        </div>
+
+        <div class="campo">
+            <span>Banco</span>
+            <strong id="banco"></strong>
+        </div>
+
+    </div>
+
+    <button
+        class="whatsapp"
+        onclick="abrirWhatsapp()">
+
+        Enviar comprovante
+
+    </button>
+
+</div>
+
+</body>
+</html>
