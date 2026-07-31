@@ -2,13 +2,13 @@ const pagamento = {
 
 beneficiario:"TAGG Connect",
 
-tipo:"CPF",
+tipo:"TELEFONE",
 
-chave:"123.456.789-00",
+chave:"(88) 9.2180-1646",
 
 banco:"Banco do Brasil",
 
-whatsapp:"558899999999"
+whatsapp:"5588921801646"
 
 };
 
