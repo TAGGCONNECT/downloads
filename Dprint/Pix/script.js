@@ -26,15 +26,9 @@ document.getElementById("banco").innerText=pagamento.banco;
 
 function copiarPix(){
 
-    const chave = document.getElementById("chavePix").innerText;
+navigator.clipboard.writeText(pagamento.chave);
 
-    navigator.clipboard.writeText(chave);
-
-    const mensagem = document.getElementById("mensagem");
-
-    mensagem.innerHTML =
-    "✅ Chave PIX copiada!<br>" +
-    "Abra o aplicativo do seu banco de preferência e efetue o pagamento.";
+alert("Chave PIX copiada!");
 
 }
 
