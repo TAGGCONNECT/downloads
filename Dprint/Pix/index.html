@@ -36,23 +36,25 @@
             <strong id="tipo"></strong>
         </div>
 
-        <div class="campo">
-            <span>Chave PIX</span>
+       <div class="campo">
 
-            <div class="pix-area">
+    <label>Chave PIX</label>
 
-                <input
-                    type="text"
-                    id="chave"
-                    readonly>
+    <div class="chave">
 
-                <button onclick="copiarPix()">
-                    Copiar
-                </button>
+        <span class="chave-texto" id="chavePix">
+            SUA-CHAVE-PIX-AQUI
+        </span>
 
-            </div>
+        <button onclick="copiarPix()" aria-label="Copiar chave PIX">
+            <i class="fa-regular fa-copy"></i>
+        </button>
 
-        </div>
+    </div>
+
+</div>
+
+<div id="mensagem"></div>
 
         <div class="campo">
             <span>Banco</span>
