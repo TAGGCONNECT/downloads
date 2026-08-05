@@ -37,3 +37,17 @@ function copiarPix(){
     "Abra o aplicativo do seu banco de preferência e efetue o pagamento.";
 
 }
+
+
+
+function abrirWhatsapp(){
+
+window.open(
+
+`https://wa.me/${pagamento.whatsapp}?text=Olá! Acabei de realizar o pagamento via PIX. Segue o comprovante.`,
+
+"_blank"
+
+);
+
+}
