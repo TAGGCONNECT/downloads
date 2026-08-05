@@ -31,25 +31,28 @@
             <strong id="beneficiario"></strong>
         </div>
 
-       <div class="campo">
+        <div class="campo">
+            <span>Tipo da chave</span>
+            <strong id="tipo"></strong>
+        </div>
 
-    <label>Chave PIX</label>
+        <div class="campo">
+            <span>Chave PIX</span>
 
-    <div class="chave">
+            <div class="pix-area">
 
-        <span class="chave-texto" id="chavePix">
-            39.499.949/0001-20
-        </span>
+                <input
+                    type="text"
+                    id="chave"
+                    readonly>
 
-        <button onclick="copiarPix()" aria-label="Copiar chave PIX">
-            <i class="fa-regular fa-copy"></i>
-        </button>
+                <button onclick="copiarPix()">
+                    Copiar
+                </button>
 
-    </div>
+            </div>
 
-</div>
-
-<div id="mensagem"></div>
+        </div>
 
         <div class="campo">
             <span>Banco</span>
