@@ -1,139 +1,149 @@
 *{
-margin:0;
-padding:0;
-box-sizing:border-box;
-font-family:Arial,Helvetica,sans-serif;
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial,Helvetica,sans-serif;
 }
 
 body{
 
-background:#111;
+    background:#111;
 
-display:flex;
+    display:flex;
 
-justify-content:center;
+    justify-content:center;
 
-align-items:center;
+    align-items:center;
 
-min-height:100vh;
+    min-height:100vh;
 
-padding:25px;
+    padding:25px;
 
-color:white;
+    color:white;
 
 }
 
 .container{
 
-width:100%;
-max-width:420px;
+    width:100%;
+    max-width:420px;
 
 }
 
 .wifi-icon{
 
-font-size:55px;
-color:#C9A227;
-text-align:center;
-margin-bottom:20px;
+    font-size:55px;
+
+    color:#39FF00;
+
+    text-align:center;
+
+    margin-bottom:20px;
 
 }
 
 h1{
 
-text-align:center;
-font-size:30px;
-margin-bottom:10px;
+    text-align:center;
+
+    font-size:30px;
+
+    margin-bottom:10px;
 
 }
 
 .descricao{
 
-text-align:center;
-color:#bfbfbf;
-margin-bottom:35px;
+    text-align:center;
+
+    color:#bfbfbf;
+
+    margin-bottom:35px;
 
 }
 
 .campo{
 
-margin-bottom:28px;
+    margin-bottom:28px;
 
 }
 
 label{
 
-display:block;
-text-align:center;
-margin-bottom:12px;
-font-size:15px;
-color:#bdbdbd;
+    display:block;
+
+    text-align:center;
+
+    margin-bottom:12px;
+
+    font-size:15px;
+
+    color:#bdbdbd;
 
 }
 
 .caixa{
 
-background:#242424;
+    background:#242424;
 
-border-radius:18px;
+    border-radius:18px;
 
-padding:18px;
+    padding:18px;
 
-display:flex;
+    display:flex;
 
-justify-content:center;
+    justify-content:center;
 
-align-items:center;
+    align-items:center;
 
-font-size:24px;
+    font-size:24px;
 
-font-weight:bold;
+    font-weight:bold;
 
-color:#C9A227;
+    color:#39FF00;
 
 }
 
 .senha{
 
-justify-content:space-between;
+    justify-content:space-between;
 
-padding-left:22px;
+    padding-left:22px;
 
 }
 
 button{
 
-background:none;
+    background:none;
 
-border:none;
+    border:none;
 
-cursor:pointer;
+    cursor:pointer;
 
-font-size:24px;
+    font-size:24px;
 
-color:#C9A227;
+    color:#39FF00;
 
-transition:.25s;
+    transition:.25s;
 
 }
 
 button:hover{
 
-transform:scale(1.1);
+    transform:scale(1.1);
 
 }
 
 #mensagem{
 
-margin-top:18px;
+    margin-top:18px;
 
-text-align:center;
+    text-align:center;
 
-color:#C9A227;
+    color:#39FF00;
 
-font-size:14px;
+    font-size:14px;
 
-height:20px;
+    height:20px;
 
 }
-
