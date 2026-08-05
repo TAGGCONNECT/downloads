@@ -1,8 +1,8 @@
 const wifi = {
 
-    rede: "\D Print",
+    rede: "\dpritclientes",
 
-    senha: "Clara2021@"
+    senha: "Clientevip1"
 
 };
 
