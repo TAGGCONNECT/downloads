@@ -9,17 +9,16 @@ const wifi = {
 document.getElementById("rede").innerText = wifi.rede;
 document.getElementById("senha").innerText = wifi.senha;
 
-function copiarSenha() {
+function copiarPix(){
 
-    navigator.clipboard.writeText(wifi.senha);
+    const chave = document.getElementById("chavePix").innerText;
+
+    navigator.clipboard.writeText(chave);
 
     const mensagem = document.getElementById("mensagem");
-    const botao = document.getElementById("copiar");
-
-    botao.innerHTML = '<i class="fa-solid fa-check"></i>';
 
     mensagem.innerHTML =
-    "✅ Senha copiada!<br>Agora abra as configurações de Wi-Fi do seu celular e conecte-se à rede.";
+    "✅ Chave PIX copiada!<br>" +
+    "Abra o aplicativo do seu banco de preferência e efetue o pagamento.";
 
 }
-
