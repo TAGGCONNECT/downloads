@@ -1,75 +1,160 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
+
     <meta charset="UTF-8">
+
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>Pagamento via PIX</title>
 
     <link rel="stylesheet" href="style.css">
 
-    <script src="script.js" defer></script>
 </head>
 
 <body>
 
-<div class="container">
+    <div class="container">
 
-    <div class="icon">
-        💳
-    </div>
-
-    <h1>Pagamento via PIX</h1>
-
-    <p class="subtitle">
-        Confira os dados antes de realizar a transferência.
-    </p>
-
-    <div class="card">
-
-        <div class="campo">
-            <span>Beneficiário</span>
-            <strong id="beneficiario"></strong>
+        <!-- ÍCONE PIX -->
+        <div class="pix-icon">
+            PIX
         </div>
 
+
+        <!-- TÍTULO -->
+        <h1>
+            Pagamento via PIX
+        </h1>
+
+
+        <!-- DESCRIÇÃO -->
+        <p class="descricao">
+            Confira os dados abaixo antes de realizar o pagamento.
+        </p>
+
+
+        <!-- BENEFICIÁRIO -->
         <div class="campo">
-            <span>Tipo da chave</span>
-            <strong id="tipo"></strong>
+
+            <label>
+                Beneficiário
+            </label>
+
+            <div class="caixa">
+
+                <span>
+                    D PRINT COMUNICAÇÃO VISUAL LTDA
+                </span>
+
+            </div>
+
         </div>
 
+
+        <!-- TIPO DE CHAVE -->
         <div class="campo">
-            <span>Chave PIX</span>
 
-            <div class="pix-area">
+            <label>
+                Tipo de chave
+            </label>
 
-                <input
-                    type="text"
-                    id="chave"
-                    readonly>
+            <div class="caixa">
 
-                <button onclick="copiarPix()">
-                    Copiar
+                <span>
+                    CNPJ
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <!-- CHAVE PIX -->
+        <div class="campo">
+
+            <label>
+                Chave PIX
+            </label>
+
+            <div class="chave">
+
+                <span id="chavePix" class="chave-texto">
+                    39.494.949/0001-20
+                </span>
+
+
+                <!-- BOTÃO SOMENTE COM ÍCONE -->
+                <button
+                    type="button"
+                    onclick="copiarPix()"
+                    aria-label="Copiar chave PIX"
+                    title="Copiar chave PIX"
+                >
+
+                    <!-- ÍCONE COPIAR -->
+                    <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="22"
+                        height="22"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                    >
+
+                        <rect
+                            x="9"
+                            y="9"
+                            width="13"
+                            height="13"
+                            rx="2"
+                            ry="2"
+                        ></rect>
+
+                        <path
+                            d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"
+                        ></path>
+
+                    </svg>
+
                 </button>
 
             </div>
 
         </div>
 
+
+        <!-- BANCO -->
         <div class="campo">
-            <span>Banco</span>
-            <strong id="banco"></strong>
+
+            <label>
+                Banco de destino
+            </label>
+
+            <div class="caixa">
+
+                <span>
+                    BANCO DO BRADESCO
+                </span>
+
+            </div>
+
         </div>
+
+
+        <!-- MENSAGEM -->
+        <div id="mensagem"></div>
+
 
     </div>
 
-    <button
-        class="whatsapp"
-        onclick="abrirWhatsapp()">
 
-        Enviar comprovante
-
-    </button>
-
-</div>
+    <script src="script.js"></script>
 
 </body>
+
 </html>
