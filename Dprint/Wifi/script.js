@@ -18,7 +18,6 @@ function copiarPix(){
     const mensagem = document.getElementById("mensagem");
 
     mensagem.innerHTML =
-    "✅ Chave PIX copiada!<br>" +
-    "Abra o aplicativo do seu banco de preferência e efetue o pagamento.";
+    "✅ Senha copiada!<br>Agora abra as configurações de Wi-Fi do seu celular e conecte-se à rede.";
 
 }
