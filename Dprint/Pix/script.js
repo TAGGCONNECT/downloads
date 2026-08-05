@@ -26,23 +26,14 @@ document.getElementById("banco").innerText=pagamento.banco;
 
 function copiarPix(){
 
-navigator.clipboard.writeText(pagamento.chave);
+    const chave = document.getElementById("chavePix").innerText;
 
-alert("Chave PIX copiada!");
+    navigator.clipboard.writeText(chave);
 
-}
+    const mensagem = document.getElementById("mensagem");
 
-
-
-function abrirWhatsapp(){
-
-window.open(
-
-`https://wa.me/${pagamento.whatsapp}?text=Olá! Acabei de realizar o pagamento via PIX. Segue o comprovante.`,
-
-"_blank"
-
-);
+    mensagem.innerHTML =
+    "✅ Chave PIX copiada!<br>" +
+    "Abra o aplicativo do seu banco de preferência e efetue o pagamento.";
 
 }
-
