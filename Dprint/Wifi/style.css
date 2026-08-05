@@ -30,7 +30,7 @@ body{
 
 }
 
-.wifi-icon{
+.pix-icon{
 
     font-size:55px;
 
@@ -82,13 +82,21 @@ label{
 
 }
 
-.caixa{
+.valor{
 
-    background:#242424;
+    text-align:center;
 
-    border-radius:18px;
+    font-size:22px;
 
-    padding:18px;
+    font-weight:bold;
+
+    color:white;
+
+    margin-top:5px;
+
+}
+
+.chave{
 
     display:flex;
 
@@ -96,19 +104,23 @@ label{
 
     align-items:center;
 
-    font-size:24px;
+    gap:15px;
+
+    margin-top:5px;
+
+}
+
+.chave-texto{
+
+    font-size:22px;
 
     font-weight:bold;
 
     color:#39FF00;
 
-}
+    word-break:break-word;
 
-.senha{
-
-    justify-content:space-between;
-
-    padding-left:22px;
+    text-align:center;
 
 }
 
@@ -120,11 +132,15 @@ button{
 
     cursor:pointer;
 
-    font-size:24px;
+    font-size:21px;
 
     color:#39FF00;
 
     transition:.25s;
+
+    padding:5px;
+
+    flex-shrink:0;
 
 }
 
@@ -136,7 +152,7 @@ button:hover{
 
 #mensagem{
 
-    margin-top:18px;
+    margin-top:22px;
 
     text-align:center;
 
@@ -144,6 +160,8 @@ button:hover{
 
     font-size:14px;
 
-    height:20px;
+    line-height:1.5;
+
+    min-height:45px;
 
 }
