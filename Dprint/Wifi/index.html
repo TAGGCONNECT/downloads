@@ -35,39 +35,20 @@ Copie nossa senha para acessar a rede.
 
 <div class="campo">
 
-<label>Rede Wi-Fi</label>
+    <label>Chave PIX</label>
 
-<div class="caixa">
+    <div class="chave">
 
-<span id="rede"></span>
+        <span class="chave-texto" id="chavePix">
+            SUA-CHAVE-PIX-AQUI
+        </span>
 
-</div>
+        <button onclick="copiarPix()" aria-label="Copiar chave PIX">
+            <i class="fa-regular fa-copy"></i>
+        </button>
 
-</div>
-
-<div class="campo">
-
-<label>Senha de acesso</label>
-
-<div class="caixa senha">
-
-<span id="senha"></span>
-
-<button id="copiar" onclick="copiarSenha()">
-
-<i class="fa-regular fa-copy"></i>
-
-</button>
+    </div>
 
 </div>
 
-</div>
-
-<p id="mensagem"></p>
-
-</div>
-
-</body>
-
-</html>
-
+<div id="mensagem"></div>
