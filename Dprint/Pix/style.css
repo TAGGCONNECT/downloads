@@ -1,227 +1,565 @@
-*{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
-    font-family:Arial,Helvetica,sans-serif;
-}
+/* =========================================================
+   CONFIGURAÇÕES DA D PRINT
+========================================================= */
+
+const PIX_CHAVE = "39494949000120";
+
+const BENEFICIARIO = "D PRINT COMUNICACAO VISUA";
+
+const CIDADE = "TABULEIRO";
+
+const TXID = "***";
 
 
-body{
+/* =========================================================
+   FORMATA VALOR
+========================================================= */
 
-    background:#111;
+function formatarValor(valor){
 
-    display:flex;
-
-    justify-content:center;
-
-    align-items:center;
-
-    min-height:100vh;
-
-    padding:25px;
-
-    color:white;
-
-}
-
-
-.container{
-
-    width:100%;
-
-    max-width:420px;
+    return Number(valor).toLocaleString("pt-BR", {
+        style:"currency",
+        currency:"BRL"
+    });
 
 }
 
 
-/* ÍCONE / IDENTIFICAÇÃO PIX */
+/* =========================================================
+   CONVERTE VALOR DIGITADO
+========================================================= */
 
-.pix-icon{
+function converterValor(valor){
 
-    font-size:55px;
+    valor = valor.trim();
 
-    font-weight:bold;
+    if(!valor){
 
-    color:#39FF00;
+        return NaN;
 
-    text-align:center;
-
-    margin-bottom:20px;
-
-}
+    }
 
 
-/* TÍTULO */
+    /*
+       Aceita:
 
-h1{
+       50
+       50,00
+       50.00
+       1.500,50
+    */
 
-    text-align:center;
-
-    font-size:30px;
-
-    margin-bottom:10px;
-
-}
-
-
-/* DESCRIÇÃO */
-
-.descricao{
-
-    text-align:center;
-
-    color:#bfbfbf;
-
-    margin-bottom:35px;
-
-    line-height:1.5;
-
-}
+    valor = valor.replace(/\s/g,"");
 
 
-/* CAMPOS */
+    if(valor.includes(",") && valor.includes(".")){
 
-.campo{
+        valor = valor.replace(/\./g,"");
 
-    margin-bottom:28px;
+        valor = valor.replace(",", ".");
+
+    }
+
+    else if(valor.includes(",")){
+
+        valor = valor.replace(",", ".");
+
+    }
+
+
+    return parseFloat(valor);
 
 }
 
 
-/* TÍTULOS DOS CAMPOS */
+/* =========================================================
+   MONTA CAMPO PIX
+========================================================= */
 
-label{
+function campoPix(id, valor){
 
-    display:block;
+    const tamanho = String(valor).length;
 
-    text-align:center;
-
-    margin-bottom:12px;
-
-    font-size:15px;
-
-    color:#bdbdbd;
-
-}
-
-
-/* CAIXAS DE INFORMAÇÃO */
-
-.caixa{
-
-    background:#242424;
-
-    border-radius:18px;
-
-    padding:18px;
-
-    display:flex;
-
-    justify-content:center;
-
-    align-items:center;
-
-    font-size:20px;
-
-    font-weight:bold;
-
-    color:#39FF00;
-
-    text-align:center;
-
-    word-break:break-word;
+    return (
+        id +
+        String(tamanho).padStart(2,"0") +
+        valor
+    );
 
 }
 
 
-/* ÁREA DA CHAVE PIX */
+/* =========================================================
+   CRC16 - PADRÃO PIX
+========================================================= */
 
-.chave{
+function crc16(payload){
 
-    display:flex;
-
-    justify-content:center;
-
-    align-items:center;
-
-    gap:12px;
-
-    padding:5px 0;
-
-}
+    let crc = 0xFFFF;
 
 
-/* TEXTO DA CHAVE */
+    for(let i = 0; i < payload.length; i++){
 
-.chave-texto{
-
-    font-size:22px;
-
-    font-weight:bold;
-
-    color:#39FF00;
-
-    text-align:center;
-
-    word-break:break-word;
-
-}
+        crc ^= payload.charCodeAt(i);
 
 
-/* BOTÃO DE COPIAR */
+        for(let j = 0; j < 8; j++){
 
-button{
+            if((crc & 0x8000) !== 0){
 
-    background:none;
+                crc = ((crc << 1) ^ 0x1021) & 0xFFFF;
 
-    border:none;
+            }
 
-    outline:none;
+            else{
 
-    cursor:pointer;
+                crc = (crc << 1) & 0xFFFF;
 
-    color:#39FF00;
+            }
 
-    display:flex;
+        }
 
-    justify-content:center;
+    }
 
-    align-items:center;
 
-    padding:5px;
-
-    transition:0.25s;
-
-    flex-shrink:0;
+    return crc
+        .toString(16)
+        .toUpperCase()
+        .padStart(4,"0");
 
 }
 
 
-/* EFEITO AO TOCAR */
+/* =========================================================
+   GERA O PIX COPIA E COLA
+========================================================= */
 
-button:hover{
+function montarPix(valor){
 
-    transform:scale(1.12);
+    /*
+       Merchant Account Information
+    */
+
+    const merchantAccountInformation =
+        campoPix(
+            "00",
+            "BR.GOV.BCB.PIX"
+        ) +
+        campoPix(
+            "01",
+            PIX_CHAVE
+        );
+
+
+    /*
+       Montagem do payload
+    */
+
+    let payload = "";
+
+
+    // Payload Format Indicator
+    payload += campoPix(
+        "00",
+        "01"
+    );
+
+
+    // Merchant Account Information
+    payload += campoPix(
+        "26",
+        merchantAccountInformation
+    );
+
+
+    // Merchant Category Code
+    payload += campoPix(
+        "52",
+        "0000"
+    );
+
+
+    // Transaction Currency - BRL
+    payload += campoPix(
+        "53",
+        "986"
+    );
+
+
+    // Valor
+    payload += campoPix(
+        "54",
+        valor.toFixed(2)
+    );
+
+
+    // País
+    payload += campoPix(
+        "58",
+        "BR"
+    );
+
+
+    // Beneficiário
+    payload += campoPix(
+        "59",
+        BENEFICIARIO
+    );
+
+
+    // Cidade
+    payload += campoPix(
+        "60",
+        CIDADE
+    );
+
+
+    // Additional Data Field Template
+    payload += campoPix(
+        "62",
+        campoPix(
+            "05",
+            TXID
+        )
+    );
+
+
+    /*
+       Campo CRC.
+       Primeiro acrescentamos 6304.
+    */
+
+    payload += "6304";
+
+
+    /*
+       Calcula CRC16
+    */
+
+    const crc = crc16(payload);
+
+
+    /*
+       Retorna o PIX Copia e Cola completo
+    */
+
+    return payload + crc;
 
 }
 
 
-/* MENSAGEM APÓS COPIAR */
+/* =========================================================
+   GERA PIX
+========================================================= */
 
-#mensagem{
+function gerarPix(){
 
-    margin-top:18px;
+    const campoValor =
+        document.getElementById("valor");
 
-    text-align:center;
 
-    color:#39FF00;
+    const valor =
+        converterValor(campoValor.value);
 
-    font-size:14px;
 
-    line-height:1.5;
+    const mensagem =
+        document.getElementById("mensagem");
 
-    min-height:45px;
 
-    padding:0 10px;
+    /*
+       Verificação do valor
+    */
+
+    if(isNaN(valor) || valor <= 0){
+
+        mensagem.innerHTML =
+            "Digite um valor válido para gerar o PIX.";
+
+        return;
+
+    }
+
+
+    /*
+       Monta o payload
+    */
+
+    const pix =
+        montarPix(valor);
+
+
+    /*
+       Limpa QR Code anterior
+    */
+
+    const qrcode =
+        document.getElementById("qrcode");
+
+
+    qrcode.innerHTML = "";
+
+
+    /*
+       Gera QR Code
+    */
+
+    new QRCode(qrcode, {
+
+        text:pix,
+
+        width:220,
+
+        height:220,
+
+        correctLevel:QRCode.CorrectLevel.M
+
+    });
+
+
+    /*
+       Mostra PIX Copia e Cola
+    */
+
+    document.getElementById(
+        "pixCopiaCola"
+    ).textContent = pix;
+
+
+    /*
+       Mostra valor
+    */
+
+    document.getElementById(
+        "valorGerado"
+    ).textContent =
+        "Valor: " + formatarValor(valor);
+
+
+    /*
+       Mostra resultado
+    */
+
+    document.getElementById(
+        "resultado"
+    ).style.display = "block";
+
+
+    /*
+       Mensagem
+    */
+
+    mensagem.innerHTML =
+        "✓ PIX gerado com sucesso!<br>" +
+        "Escaneie o QR Code ou copie o PIX Copia e Cola.";
+
+
+    /*
+       Rola suavemente até o resultado
+    */
+
+    setTimeout(function(){
+
+        document
+            .getElementById("resultado")
+            .scrollIntoView({
+                behavior:"smooth",
+                block:"start"
+            });
+
+    },150);
 
 }
+
+
+/* =========================================================
+   COPIAR CHAVE PIX
+========================================================= */
+
+function copiarChave(){
+
+    /*
+       No código do PIX, CNPJ deve ser utilizado
+       somente com números.
+    */
+
+    const chave =
+        PIX_CHAVE;
+
+
+    copiarTexto(chave, function(){
+
+        const mensagem =
+            document.getElementById("mensagem");
+
+
+        mensagem.innerHTML =
+            "✓ Chave PIX copiada!<br>" +
+            "Abra o aplicativo do seu banco de preferência e efetue o pagamento.";
+
+    });
+
+}
+
+
+/* =========================================================
+   COPIAR PIX COPIA E COLA
+========================================================= */
+
+function copiarPix(){
+
+    const elemento =
+        document.getElementById(
+            "pixCopiaCola"
+        );
+
+
+    const pix =
+        elemento.textContent.trim();
+
+
+    if(!pix){
+
+        return;
+
+    }
+
+
+    copiarTexto(pix, function(){
+
+        const mensagem =
+            document.getElementById("mensagem");
+
+
+        mensagem.innerHTML =
+            "✓ PIX Copia e Cola copiado!<br>" +
+            "Abra o aplicativo do seu banco de preferência e cole o código para efetuar o pagamento.";
+
+    });
+
+}
+
+
+/* =========================================================
+   FUNÇÃO UNIVERSAL DE CÓPIA
+========================================================= */
+
+function copiarTexto(texto, sucesso){
+
+    /*
+       Método moderno
+    */
+
+    if(
+        navigator.clipboard &&
+        window.isSecureContext
+    ){
+
+        navigator.clipboard
+            .writeText(texto)
+            .then(sucesso)
+            .catch(function(){
+
+                copiarFallback(
+                    texto,
+                    sucesso
+                );
+
+            });
+
+        return;
+
+    }
+
+
+    /*
+       Método alternativo
+    */
+
+    copiarFallback(
+        texto,
+        sucesso
+    );
+
+}
+
+
+/* =========================================================
+   FALLBACK PARA COPIAR
+========================================================= */
+
+function copiarFallback(texto, sucesso){
+
+    const textarea =
+        document.createElement("textarea");
+
+
+    textarea.value = texto;
+
+
+    textarea.style.position =
+        "fixed";
+
+    textarea.style.opacity =
+        "0";
+
+
+    document.body.appendChild(
+        textarea
+    );
+
+
+    textarea.focus();
+
+    textarea.select();
+
+
+    try{
+
+        document.execCommand(
+            "copy"
+        );
+
+        sucesso();
+
+    }
+
+    catch(error){
+
+        const mensagem =
+            document.getElementById(
+                "mensagem"
+            );
+
+
+        mensagem.innerHTML =
+            "Não foi possível copiar automaticamente. " +
+            "Toque e segure o código para copiá-lo.";
+
+    }
+
+
+    document.body.removeChild(
+        textarea
+    );
+
+}
+
+
+/* =========================================================
+   ENTER NO CAMPO DE VALOR
+========================================================= */
+
+document
+    .getElementById("valor")
+    .addEventListener(
+        "keydown",
+        function(event){
+
+            if(event.key === "Enter"){
+
+                gerarPix();
+
+            }
+
+        }
+    );
