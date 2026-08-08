@@ -7,7 +7,7 @@ CONFIGURAÇÃO DO CLIENTE
 
 const PIX_CONFIG = {
 
-    chave: "39.494.949/0001-20",
+    chave: "39494949000120",
 
     tipoChave: "CNPJ",
 
