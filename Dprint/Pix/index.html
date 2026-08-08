@@ -5,7 +5,10 @@
 
     <meta charset="UTF-8">
 
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
 
     <title>Pagamento via PIX | D Print</title>
 
@@ -17,6 +20,7 @@
 <body>
 
 <div class="container">
+
 
     <!-- LOGO -->
     <div class="logo-area">
@@ -186,9 +190,7 @@
         class="botao-gerar"
         onclick="gerarPix()"
     >
-
         GERAR PIX
-
     </button>
 
 
@@ -197,6 +199,7 @@
         id="resultado"
         class="resultado"
     >
+
 
         <!-- QR CODE -->
         <div
@@ -228,6 +231,7 @@
             ></div>
 
 
+            <!-- BOTÃO COPIAR PIX -->
             <button
                 type="button"
                 onclick="copiarPix()"
@@ -279,10 +283,13 @@
 </div>
 
 
-<!-- Biblioteca para gerar QR Code -->
+<!-- BIBLIOTECA QR CODE -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 
-<script src="script.js"></script>
+
+<!-- NOSSO JAVASCRIPT -->
+<script src="./script.js?v=2"></script>
+
 
 </body>
 
