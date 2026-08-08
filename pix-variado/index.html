@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Pagamento via PIX</title>
+
+    <link rel="stylesheet" href="style.css">
+
+</head>
+
+
+<body>
+
+
+    <div class="container">
+
+
+        <!-- ÍCONE PIX -->
+
+        <div class="pix-icon">
+
+            PIX
+
+        </div>
+
+
+        <!-- TÍTULO -->
+
+        <h1>
+
+            Pagamento via PIX
+
+        </h1>
+
+
+        <!-- DESCRIÇÃO -->
+
+        <p class="descricao">
+
+            Informe o valor que deseja pagar e gere seu PIX.
+
+        </p>
+
+
+
+        <!-- BENEFICIÁRIO -->
+
+        <div class="informacao">
+
+            <span class="titulo">
+
+                Beneficiário
+
+            </span>
+
+            <strong>
+
+                D PRINT COMUNICAÇÃO VISUAL
+
+            </strong>
+
+        </div>
+
+
+
+        <!-- BANCO -->
+
+        <div class="informacao">
+
+            <span class="titulo">
+
+                Banco de destino
+
+            </span>
+
+            <strong>
+
+                BANCO DO BRASIL
+
+            </strong>
+
+        </div>
+
+
+
+        <!-- VALOR -->
+
+        <div class="campo">
+
+            <label for="valor">
+
+                Valor do pagamento
+
+            </label>
+
+
+            <div class="valor-box">
+
+                <span>
+
+                    R$
+
+                </span>
+
+
+                <input
+                    type="text"
+                    id="valor"
+                    inputmode="decimal"
+                    placeholder="0,00"
+                    autocomplete="off"
+                >
+
+            </div>
+
+        </div>
+
+
+
+        <!-- BOTÃO -->
+
+        <button
+            class="botao"
+            onclick="gerarPix()"
+        >
+
+            GERAR PIX
+
+        </button>
+
+
+
+        <!-- ÁREA DO RESULTADO -->
+
+        <div
+            id="resultado"
+            class="resultado"
+        >
+
+
+            <!-- QR CODE -->
+
+            <div
+                id="qrcode"
+                class="qrcode"
+            ></div>
+
+
+
+            <!-- VALOR GERADO -->
+
+            <div
+                id="valorGerado"
+                class="valor-gerado"
+            ></div>
+
+
+
+            <!-- COPIA E COLA -->
+
+            <div class="pix-copia">
+
+                <span>
+
+                    PIX Copia e Cola
+
+                </span>
+
+
+                <div class="codigo">
+
+                    <input
+                        type="text"
+                        id="codigoPix"
+                        readonly
+                    >
+
+
+                    <button
+                        class="copiar"
+                        onclick="copiarPix()"
+                        aria-label="Copiar PIX"
+                        title="Copiar PIX"
+                    >
+
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="21"
+                            height="21"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                        >
+
+                            <rect
+                                x="9"
+                                y="9"
+                                width="13"
+                                height="13"
+                                rx="2"
+                                ry="2"
+                            ></rect>
+
+                            <path
+                                d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"
+                            ></path>
+
+                        </svg>
+
+                    </button>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- MENSAGEM -->
+
+            <div
+                id="mensagem"
+                class="mensagem"
+            ></div>
+
+
+        </div>
+
+
+    </div>
+
+
+
+    <!-- BIBLIOTECA PARA GERAR QR CODE -->
+
+    <script
+        src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js">
+    </script>
+
+
+    <script src="script.js"></script>
+
+
+</body>
+
+</html>
