@@ -7,15 +7,15 @@ CONFIGURAÇÃO DO CLIENTE
 
 const PIX_CONFIG = {
 
-    chave: "067.802.513-48",
+    chave: "39.494.949/0001-20",
 
-    tipoChave: "CPF",
+    tipoChave: "CNPJ",
 
     beneficiario: "D PRINT COMUNICACAO VISUAL",
 
     cidade: "TABULEIRO DO NORTE",
 
-    banco: "BANCO DO BRADESCO"
+    banco: "BANCO DO BRASIL"
 
 };
 
