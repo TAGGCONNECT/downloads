@@ -7,7 +7,7 @@ CONFIGURAÇÃO DO CLIENTE
 
 const PIX_CONFIG = {
 
-    chave: "000.000.000-00",
+    chave: "067.802.513-48",
 
     tipoChave: "CPF",
 
@@ -15,7 +15,7 @@ const PIX_CONFIG = {
 
     cidade: "TABULEIRO DO NORTE",
 
-    banco: "BANCO DO BRASIL"
+    banco: "BANCO DO BRADESCO"
 
 };
 
