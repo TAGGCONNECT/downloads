@@ -1,35 +1,518 @@
-function copiarPix(){
-
-    const chave = document
-        .getElementById("chavePix")
-        .innerText
-        .trim();
-
-
-    navigator.clipboard.writeText(chave)
-
-        .then(function(){
-
-            const mensagem =
-                document.getElementById("mensagem");
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial,Helvetica,sans-serif;
+}
 
 
-            mensagem.innerHTML =
-                "✓ Chave PIX copiada!<br>" +
-                "Abra o aplicativo do seu banco de preferência e efetue o pagamento.";
+body{
 
-        })
+    background:#111;
 
-        .catch(function(){
+    display:flex;
 
-            const mensagem =
-                document.getElementById("mensagem");
+    justify-content:center;
+
+    align-items:center;
+
+    min-height:100vh;
+
+    padding:25px;
+
+    color:white;
+
+}
 
 
-            mensagem.innerHTML =
-                "Não foi possível copiar automaticamente. " +
-                "Toque e segure a chave para copiá-la.";
+.container{
 
-        });
+    width:100%;
+
+    max-width:420px;
+
+}
+
+
+/* LOGO */
+
+.logo-area{
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    margin-bottom:20px;
+
+}
+
+
+.logo{
+
+    display:block;
+
+    max-width:190px;
+
+    max-height:85px;
+
+    width:auto;
+
+    height:auto;
+
+    object-fit:contain;
+
+}
+
+
+/* TÍTULO */
+
+h1{
+
+    text-align:center;
+
+    font-size:30px;
+
+    margin-bottom:10px;
+
+}
+
+
+/* DESCRIÇÃO */
+
+.descricao{
+
+    text-align:center;
+
+    color:#bfbfbf;
+
+    margin-bottom:35px;
+
+    line-height:1.5;
+
+}
+
+
+/* CAMPOS */
+
+.campo{
+
+    margin-bottom:24px;
+
+}
+
+
+/* TÍTULOS */
+
+label{
+
+    display:block;
+
+    text-align:center;
+
+    margin-bottom:10px;
+
+    font-size:15px;
+
+    color:#bdbdbd;
+
+}
+
+
+/* CAIXAS */
+
+.caixa{
+
+    background:#242424;
+
+    border-radius:18px;
+
+    padding:17px;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    font-size:19px;
+
+    font-weight:bold;
+
+    color:#39FF00;
+
+    text-align:center;
+
+    word-break:break-word;
+
+}
+
+
+/* CHAVE PIX */
+
+.chave{
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    gap:12px;
+
+    padding:5px 0;
+
+}
+
+
+.chave-texto{
+
+    font-size:21px;
+
+    font-weight:bold;
+
+    color:#39FF00;
+
+    text-align:center;
+
+    word-break:break-word;
+
+}
+
+
+/* BOTÕES DE ÍCONE */
+
+button{
+
+    background:none;
+
+    border:none;
+
+    outline:none;
+
+    cursor:pointer;
+
+    color:#39FF00;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    padding:6px;
+
+    transition:0.25s;
+
+}
+
+
+button:hover{
+
+    transform:scale(1.10);
+
+}
+
+
+/* CAMPO DO VALOR */
+
+.valor-area{
+
+    background:#242424;
+
+    border-radius:18px;
+
+    padding:5px 18px;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+}
+
+
+.simbolo{
+
+    color:#39FF00;
+
+    font-size:24px;
+
+    font-weight:bold;
+
+    margin-right:8px;
+
+}
+
+
+#valor{
+
+    width:100%;
+
+    background:transparent;
+
+    border:none;
+
+    outline:none;
+
+    color:#39FF00;
+
+    font-size:27px;
+
+    font-weight:bold;
+
+    text-align:center;
+
+    padding:13px 5px;
+
+}
+
+
+#valor::placeholder{
+
+    color:#777;
+
+}
+
+
+#valor:focus{
+
+    outline:none;
+
+}
+
+
+/* BOTÃO GERAR PIX */
+
+.botao-gerar{
+
+    width:100%;
+
+    background:#39FF00;
+
+    color:#111;
+
+    border-radius:18px;
+
+    padding:17px;
+
+    font-size:17px;
+
+    font-weight:bold;
+
+    letter-spacing:.5px;
+
+    margin-top:4px;
+
+    transition:.25s;
+
+}
+
+
+.botao-gerar:hover{
+
+    transform:translateY(-2px) scale(1.01);
+
+}
+
+
+/* RESULTADO */
+
+.resultado{
+
+    display:none;
+
+    margin-top:30px;
+
+    text-align:center;
+
+}
+
+
+/* QR CODE */
+
+.qrcode{
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    background:white;
+
+    width:max-content;
+
+    margin:0 auto 20px;
+
+    padding:14px;
+
+    border-radius:18px;
+
+}
+
+
+.qrcode img{
+
+    display:block;
+
+}
+
+
+/* VALOR GERADO */
+
+.valor-gerado{
+
+    color:#39FF00;
+
+    font-size:20px;
+
+    font-weight:bold;
+
+    margin-bottom:25px;
+
+}
+
+
+/* TÍTULO COPIA E COLA */
+
+.copia-cola-titulo{
+
+    color:#bdbdbd;
+
+    font-size:15px;
+
+    margin-bottom:10px;
+
+}
+
+
+/* COPIA E COLA */
+
+.copia-cola{
+
+    background:#242424;
+
+    border-radius:18px;
+
+    padding:15px;
+
+    display:flex;
+
+    align-items:center;
+
+    gap:10px;
+
+    text-align:left;
+
+}
+
+
+.pix-texto{
+
+    flex:1;
+
+    color:#bfbfbf;
+
+    font-size:12px;
+
+    line-height:1.4;
+
+    word-break:break-all;
+
+    max-height:65px;
+
+    overflow:auto;
+
+}
+
+
+.botao-copiar{
+
+    flex-shrink:0;
+
+}
+
+
+/* MENSAGEM */
+
+#mensagem{
+
+    margin-top:18px;
+
+    text-align:center;
+
+    color:#39FF00;
+
+    font-size:14px;
+
+    line-height:1.5;
+
+    min-height:45px;
+
+    padding:0 10px;
+
+}
+
+
+/* CELULAR */
+
+@media(max-width:480px){
+
+    body{
+
+        padding:20px 16px;
+
+        align-items:flex-start;
+
+        padding-top:30px;
+
+    }
+
+
+    .container{
+
+        max-width:420px;
+
+    }
+
+
+    h1{
+
+        font-size:27px;
+
+    }
+
+
+    .descricao{
+
+        margin-bottom:30px;
+
+    }
+
+
+    .caixa{
+
+        font-size:17px;
+
+    }
+
+
+    .chave-texto{
+
+        font-size:18px;
+
+    }
+
+
+    .logo{
+
+        max-width:170px;
+
+        max-height:75px;
+
+    }
 
 }
