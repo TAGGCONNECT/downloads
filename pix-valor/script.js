@@ -1,413 +1,407 @@
-*{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
-    font-family:Arial,Helvetica,sans-serif;
-}
+/*
+==================================================
+CONFIGURAÇÃO DO CLIENTE
+==================================================
+*/
 
 
-body{
+const PIX_CONFIG = {
 
-    background:#111;
+    chave: "000.000.000-00",
 
-    display:flex;
+    tipoChave: "CPF",
 
-    justify-content:center;
+    beneficiario: "D PRINT COMUNICACAO VISUAL",
 
-    align-items:center;
+    cidade: "TABULEIRO DO NORTE",
 
-    min-height:100vh;
+    banco: "BANCO DO BRASIL"
 
-    padding:25px;
+};
 
-    color:white;
 
-}
 
+/*
+==================================================
+GERAR PIX
+==================================================
+*/
 
-.container{
 
-    width:100%;
+function gerarPix(){
 
-    max-width:420px;
+    const campoValor =
+        document.getElementById("valor");
 
-}
 
+    let valorDigitado =
+        campoValor.value.trim();
 
-/* PIX */
 
-.pix-icon{
+    if(!valorDigitado){
 
-    font-size:55px;
+        mostrarMensagem(
+            "Digite o valor que deseja pagar."
+        );
 
-    font-weight:bold;
+        return;
 
-    color:#39FF00;
+    }
 
-    text-align:center;
 
-    margin-bottom:20px;
+    /*
+    Converte vírgula para ponto
+    */
 
-}
+    valorDigitado =
+        valorDigitado.replace(/\./g, "")
+                     .replace(",", ".");
 
 
-/* TÍTULO */
+    const valor =
+        parseFloat(valorDigitado);
 
-h1{
 
-    text-align:center;
+    if(isNaN(valor) || valor <= 0){
 
-    font-size:30px;
+        mostrarMensagem(
+            "Digite um valor válido."
+        );
 
-    margin-bottom:10px;
+        return;
 
-}
+    }
 
 
-/* DESCRIÇÃO */
+    /*
+    Formata valor para o padrão PIX
+    */
 
-.descricao{
+    const valorPix =
+        valor.toFixed(2);
 
-    text-align:center;
 
-    color:#bfbfbf;
+    /*
+    Gera o PIX Copia e Cola
+    */
 
-    margin-bottom:30px;
+    const payload =
+        gerarPayloadPix(valorPix);
 
-    line-height:1.5;
 
-}
+    /*
+    Mostra QR Code
+    */
 
+    const qr =
+        document.getElementById("qrcode");
 
-/* INFORMAÇÕES */
 
-.informacao{
+    qr.innerHTML = "";
 
-    background:#242424;
 
-    border-radius:18px;
+    new QRCode(qr, {
 
-    padding:15px 18px;
+        text: payload,
 
-    margin-bottom:15px;
+        width: 200,
 
-    text-align:center;
+        height: 200,
 
-}
+        correctLevel: QRCode.CorrectLevel.M
 
+    });
 
-.titulo{
 
-    display:block;
 
-    font-size:14px;
+    /*
+    Mostra código PIX
+    */
 
-    color:#bdbdbd;
+    document.getElementById("codigoPix").value =
+        payload;
 
-    margin-bottom:6px;
 
-}
 
+    /*
+    Mostra valor
+    */
 
-.informacao strong{
+    document.getElementById("valorGerado").innerText =
+        "Valor: R$ " +
+        valor.toFixed(2).replace(".", ",");
 
-    display:block;
 
-    color:#39FF00;
 
-    font-size:18px;
+    /*
+    Mostra resultado
+    */
 
-    word-break:break-word;
+    document.getElementById("resultado").style.display =
+        "block";
 
-}
 
 
-/* CAMPO DO VALOR */
+    /*
+    Limpa mensagem anterior
+    */
 
-.campo{
+    document.getElementById("mensagem").innerHTML =
+        "";
 
-    margin-top:25px;
 
-    margin-bottom:20px;
 
-}
+    /*
+    Desce a tela até o QR Code
+    */
 
+    document.getElementById("resultado")
+        .scrollIntoView({
 
-label{
+            behavior:"smooth",
 
-    display:block;
+            block:"start"
 
-    text-align:center;
-
-    margin-bottom:12px;
-
-    font-size:15px;
-
-    color:#bdbdbd;
-
-}
-
-
-/* VALOR */
-
-.valor-box{
-
-    background:#242424;
-
-    border-radius:18px;
-
-    padding:16px 20px;
-
-    display:flex;
-
-    align-items:center;
-
-    justify-content:center;
-
-    gap:8px;
-
-}
-
-
-.valor-box span{
-
-    font-size:25px;
-
-    font-weight:bold;
-
-    color:#39FF00;
+        });
 
 }
 
 
-.valor-box input{
 
-    width:150px;
-
-    background:none;
-
-    border:none;
-
-    outline:none;
-
-    color:#39FF00;
-
-    font-size:28px;
-
-    font-weight:bold;
-
-    text-align:left;
-
-}
+/*
+==================================================
+GERAR PAYLOAD PIX
+==================================================
+*/
 
 
-.valor-box input::placeholder{
-
-    color:#777;
-
-}
+function gerarPayloadPix(valor){
 
 
-/* BOTÃO */
-
-.botao{
-
-    width:100%;
-
-    border:none;
-
-    border-radius:18px;
-
-    padding:17px;
-
-    background:#39FF00;
-
-    color:#111;
-
-    font-size:16px;
-
-    font-weight:bold;
-
-    cursor:pointer;
-
-    transition:.25s;
-
-}
+    const chave =
+        PIX_CONFIG.chave;
 
 
-.botao:hover{
-
-    transform:scale(1.02);
-
-}
-
-
-/* RESULTADO */
-
-.resultado{
-
-    display:none;
-
-    margin-top:30px;
-
-    text-align:center;
-
-}
+    const nome =
+        removerAcentos(
+            PIX_CONFIG.beneficiario
+        )
+        .substring(0,25)
+        .toUpperCase();
 
 
-/* QR CODE */
+    const cidade =
+        removerAcentos(
+            PIX_CONFIG.cidade
+        )
+        .substring(0,15)
+        .toUpperCase();
 
-.qrcode{
 
-    background:white;
 
-    width:220px;
+    /*
+    Merchant Account Information
 
-    height:220px;
+    00 = GUI
+    01 = chave PIX
+    */
 
-    padding:10px;
+    const merchantAccount =
+        "0014br.gov.bcb.pix" +
+        "01" +
+        formatarCampo(chave);
 
-    margin:0 auto 20px;
 
-    border-radius:15px;
 
-    display:flex;
+    /*
+    Payload base
+    */
 
-    align-items:center;
+    let payload =
 
-    justify-content:center;
+        "000201" +
+
+        "26" +
+        String(merchantAccount.length).padStart(2,"0") +
+        merchantAccount +
+
+        "52040000" +
+
+        "5303986" +
+
+        "54" +
+        String(valor.length).padStart(2,"0") +
+        valor +
+
+        "5802BR" +
+
+        "59" +
+        String(nome.length).padStart(2,"0") +
+        nome +
+
+        "60" +
+        String(cidade.length).padStart(2,"0") +
+        cidade +
+
+        "62070503***" +
+
+        "6304";
+
+
+
+    /*
+    CRC16
+    */
+
+    const crc =
+        crc16(payload);
+
+
+    return payload + crc;
 
 }
 
 
-.qrcode img{
 
-    max-width:100%;
+/*
+==================================================
+FORMATAR CAMPO PIX
+==================================================
+*/
 
-}
 
+function formatarCampo(valor){
 
-/* VALOR GERADO */
-
-.valor-gerado{
-
-    color:#39FF00;
-
-    font-size:20px;
-
-    font-weight:bold;
-
-    margin-bottom:22px;
+    return (
+        String(valor.length).padStart(2,"0") +
+        valor
+    );
 
 }
 
 
-/* COPIA E COLA */
 
-.pix-copia{
-
-    text-align:left;
-
-}
-
-
-.pix-copia > span{
-
-    display:block;
-
-    text-align:center;
-
-    color:#bdbdbd;
-
-    font-size:14px;
-
-    margin-bottom:10px;
-
-}
+/*
+==================================================
+CRC16
+==================================================
+*/
 
 
-.codigo{
+function crc16(payload){
 
-    display:flex;
-
-    align-items:center;
-
-    gap:8px;
-
-}
+    let crc = 0xFFFF;
 
 
-.codigo input{
+    for(let i = 0; i < payload.length; i++){
 
-    flex:1;
+        crc ^= payload.charCodeAt(i) << 8;
 
-    min-width:0;
 
-    background:#242424;
+        for(let j = 0; j < 8; j++){
 
-    border:none;
+            if((crc & 0x8000) !== 0){
 
-    border-radius:14px;
+                crc =
+                    (crc << 1) ^
+                    0x1021;
 
-    padding:14px;
+            }else{
 
-    color:#bdbdbd;
+                crc =
+                    crc << 1;
 
-    font-size:12px;
+            }
 
-    outline:none;
+
+            crc &=
+                0xFFFF;
+
+        }
+
+    }
+
+
+    return crc
+        .toString(16)
+        .toUpperCase()
+        .padStart(4,"0");
 
 }
 
 
-.copiar{
 
-    width:48px;
+/*
+==================================================
+COPIAR PIX
+==================================================
+*/
 
-    height:48px;
 
-    border:none;
+function copiarPix(){
 
-    border-radius:14px;
+    const campo =
+        document.getElementById("codigoPix");
 
-    background:#242424;
 
-    color:#39FF00;
+    const codigo =
+        campo.value;
 
-    display:flex;
 
-    align-items:center;
+    navigator.clipboard.writeText(codigo)
 
-    justify-content:center;
+        .then(function(){
 
-    cursor:pointer;
+            mostrarMensagem(
+                "✓ PIX Copia e Cola copiado! Abra o aplicativo do seu banco e efetue o pagamento."
+            );
 
-    flex-shrink:0;
+        })
 
-    transition:.25s;
+        .catch(function(){
+
+            campo.select();
+
+            document.execCommand("copy");
+
+
+            mostrarMensagem(
+                "✓ PIX Copia e Cola copiado! Abra o aplicativo do seu banco e efetue o pagamento."
+            );
+
+        });
 
 }
 
 
-.copiar:hover{
 
-    transform:scale(1.08);
+/*
+==================================================
+MENSAGEM
+==================================================
+*/
+
+
+function mostrarMensagem(texto){
+
+    document.getElementById("mensagem").innerText =
+        texto;
 
 }
 
 
-/* MENSAGEM */
 
-.mensagem{
+/*
+==================================================
+REMOVER ACENTOS
+==================================================
+*/
 
-    margin-top:18px;
 
-    color:#39FF00;
+function removerAcentos(texto){
 
-    font-size:14px;
-
-    line-height:1.5;
-
-    min-height:40px;
+    return texto
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g,"");
 
 }
