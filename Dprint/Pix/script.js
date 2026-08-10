@@ -143,7 +143,7 @@ function montarPix(valor){
     const merchantAccountInformation =
         campoPix(
             "00",
-            "BR.GOV.BCB.PIX"
+            "br.gov.bcb.pix"
         ) +
         campoPix(
             "01",
