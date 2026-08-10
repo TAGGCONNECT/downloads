@@ -15,11 +15,11 @@ const TXID = "***";
    FORMATA VALOR
 ========================================================= */
 
-function formatarValor(valor){
+function formatarValor(valor) {
 
     return Number(valor).toLocaleString("pt-BR", {
-        style:"currency",
-        currency:"BRL"
+        style: "currency",
+        currency: "BRL"
     });
 
 }
@@ -29,43 +29,38 @@ function formatarValor(valor){
    CONVERTE VALOR DIGITADO
 ========================================================= */
 
-function converterValor(valor){
+function converterValor(valor) {
 
-    valor = valor.trim();
+    valor = String(valor).trim();
 
-    if(!valor){
-
+    if (!valor) {
         return NaN;
-
     }
 
+    valor = valor.replace(/\s/g, "");
 
     /*
-       Aceita:
+        Aceita:
 
-       50
-       50,00
-       50.00
-       1.500,50
+        10
+        10,00
+        10.00
+        1.500,50
+        1500,50
     */
 
-    valor = valor.replace(/\s/g,"");
+    if (valor.includes(",") && valor.includes(".")) {
 
-
-    if(valor.includes(",") && valor.includes(".")){
-
-        valor = valor.replace(/\./g,"");
-
+        valor = valor.replace(/\./g, "");
         valor = valor.replace(",", ".");
 
     }
 
-    else if(valor.includes(",")){
+    else if (valor.includes(",")) {
 
         valor = valor.replace(",", ".");
 
     }
-
 
     return parseFloat(valor);
 
@@ -73,16 +68,22 @@ function converterValor(valor){
 
 
 /* =========================================================
-   MONTA CAMPO PIX
+   CRIA CAMPO EMV/BR CODE
+
+   Estrutura:
+
+   ID + TAMANHO + VALOR
 ========================================================= */
 
-function campoPix(id, valor){
+function campoPix(id, valor) {
 
-    const tamanho = String(valor).length;
+    valor = String(valor);
+
+    const tamanho = valor.length;
 
     return (
         id +
-        String(tamanho).padStart(2,"0") +
+        String(tamanho).padStart(2, "0") +
         valor
     );
 
@@ -90,30 +91,32 @@ function campoPix(id, valor){
 
 
 /* =========================================================
-   CRC16 - PADRÃO PIX
+   CRC16 CCITT-FALSE
+
+   Padrão utilizado pelo BR Code Pix
 ========================================================= */
 
-function crc16(payload){
+function crc16(payload) {
 
     let crc = 0xFFFF;
 
+    for (let i = 0; i < payload.length; i++) {
 
-    for(let i = 0; i < payload.length; i++){
+        crc ^= payload.charCodeAt(i) << 8;
 
-        crc ^= payload.charCodeAt(i);
+        for (let j = 0; j < 8; j++) {
 
+            if ((crc & 0x8000) !== 0) {
 
-        for(let j = 0; j < 8; j++){
-
-            if((crc & 0x8000) !== 0){
-
-                crc = ((crc << 1) ^ 0x1021) & 0xFFFF;
+                crc =
+                    ((crc << 1) ^ 0x1021) & 0xFFFF;
 
             }
 
-            else{
+            else {
 
-                crc = (crc << 1) & 0xFFFF;
+                crc =
+                    (crc << 1) & 0xFFFF;
 
             }
 
@@ -121,23 +124,29 @@ function crc16(payload){
 
     }
 
-
     return crc
         .toString(16)
         .toUpperCase()
-        .padStart(4,"0");
+        .padStart(4, "0");
 
 }
 
 
 /* =========================================================
-   GERA O PIX COPIA E COLA
+   MONTA O PIX COPIA E COLA
 ========================================================= */
 
-function montarPix(valor){
+function montarPix(valor) {
 
     /*
-       Merchant Account Information
+        -----------------------------------------------------
+        MERCHANT ACCOUNT INFORMATION
+
+        Campo 26
+
+        00 = GUI
+        01 = Chave Pix
+        -----------------------------------------------------
     */
 
     const merchantAccountInformation =
@@ -145,6 +154,7 @@ function montarPix(valor){
             "00",
             "br.gov.bcb.pix"
         ) +
+
         campoPix(
             "01",
             PIX_CHAVE
@@ -152,95 +162,152 @@ function montarPix(valor){
 
 
     /*
-       Montagem do payload
+        -----------------------------------------------------
+        PAYLOAD
+        -----------------------------------------------------
     */
 
     let payload = "";
 
 
-    // Payload Format Indicator
+    /*
+        00 - Payload Format Indicator
+    */
+
     payload += campoPix(
         "00",
         "01"
     );
 
 
-    // Merchant Account Information
+    /*
+        26 - Merchant Account Information
+    */
+
     payload += campoPix(
         "26",
         merchantAccountInformation
     );
 
 
-    // Merchant Category Code
+    /*
+        52 - Merchant Category Code
+
+        0000 = não especificado
+    */
+
     payload += campoPix(
         "52",
         "0000"
     );
 
 
-    // Transaction Currency - BRL
+    /*
+        53 - Transaction Currency
+
+        986 = BRL
+    */
+
     payload += campoPix(
         "53",
         "986"
     );
 
 
-    // Valor
+    /*
+        54 - Transaction Amount
+
+        Exemplo:
+        10.00
+    */
+
     payload += campoPix(
         "54",
-        valor.toFixed(2)
+        Number(valor).toFixed(2)
     );
 
 
-    // País
+    /*
+        58 - Country Code
+    */
+
     payload += campoPix(
         "58",
         "BR"
     );
 
 
-    // Beneficiário
+    /*
+        59 - Merchant Name
+    */
+
     payload += campoPix(
         "59",
         BENEFICIARIO
     );
 
 
-    // Cidade
+    /*
+        60 - Merchant City
+    */
+
     payload += campoPix(
         "60",
         CIDADE
     );
 
 
-    // Additional Data Field Template
-    payload += campoPix(
-        "62",
+    /*
+        62 - Additional Data Field Template
+
+        05 = TxId
+
+        *** = TxId padrão para QR Code estático
+        sem identificador específico.
+    */
+
+    const additionalData =
         campoPix(
             "05",
             TXID
-        )
+        );
+
+
+    payload += campoPix(
+        "62",
+        additionalData
     );
 
 
     /*
-       Campo CRC.
-       Primeiro acrescentamos 6304.
+        -----------------------------------------------------
+        CRC
+
+        O campo 63 é formado por:
+
+        63
+        04
+        CRC
+
+        Para calcular o CRC, acrescentamos primeiro:
+
+        6304
+        -----------------------------------------------------
     */
 
     payload += "6304";
 
 
     /*
-       Calcula CRC16
+        Calcula o CRC sobre todo o payload
+        até o campo 6304.
     */
 
     const crc = crc16(payload);
 
 
     /*
-       Retorna o PIX Copia e Cola completo
+        Retorna o PIX Copia e Cola completo
     */
 
     return payload + crc;
@@ -252,25 +319,59 @@ function montarPix(valor){
    GERA PIX
 ========================================================= */
 
-function gerarPix(){
+function gerarPix() {
 
     const campoValor =
         document.getElementById("valor");
-
-
-    const valor =
-        converterValor(campoValor.value);
-
 
     const mensagem =
         document.getElementById("mensagem");
 
 
     /*
-       Verificação do valor
+        Verifica se os elementos existem
     */
 
-    if(isNaN(valor) || valor <= 0){
+    if (!campoValor) {
+
+        console.error(
+            "Campo #valor não encontrado."
+        );
+
+        return;
+
+    }
+
+
+    if (!mensagem) {
+
+        console.error(
+            "Elemento #mensagem não encontrado."
+        );
+
+        return;
+
+    }
+
+
+    /*
+        Converte o valor
+    */
+
+    const valor =
+        converterValor(
+            campoValor.value
+        );
+
+
+    /*
+        Validação
+    */
+
+    if (
+        isNaN(valor) ||
+        valor <= 0
+    ) {
 
         mensagem.innerHTML =
             "Digite um valor válido para gerar o PIX.";
@@ -281,7 +382,7 @@ function gerarPix(){
 
 
     /*
-       Monta o payload
+        Gera o PIX Copia e Cola
     */
 
     const pix =
@@ -289,63 +390,137 @@ function gerarPix(){
 
 
     /*
-       Limpa QR Code anterior
+        Exibe no console para conferência
+
+        F12 → Console
+    */
+
+    console.log(
+        "PIX Copia e Cola:",
+        pix
+    );
+
+
+    /*
+        QR CODE
     */
 
     const qrcode =
         document.getElementById("qrcode");
 
 
+    if (!qrcode) {
+
+        console.error(
+            "Elemento #qrcode não encontrado."
+        );
+
+        return;
+
+    }
+
+
+    /*
+        Limpa QR Code anterior
+    */
+
     qrcode.innerHTML = "";
 
 
     /*
-       Gera QR Code
+        Verifica biblioteca QRCode
     */
 
-    new QRCode(qrcode, {
+    if (
+        typeof QRCode ===
+        "undefined"
+    ) {
 
-        text:pix,
+        mensagem.innerHTML =
+            "Erro: biblioteca do QR Code não carregada.";
 
-        width:220,
+        console.error(
+            "QRCode.js não foi carregado."
+        );
 
-        height:220,
+        return;
 
-        correctLevel:QRCode.CorrectLevel.M
-
-    });
+    }
 
 
     /*
-       Mostra PIX Copia e Cola
+        Gera QR Code
     */
 
-    document.getElementById(
-        "pixCopiaCola"
-    ).textContent = pix;
+    new QRCode(
+        qrcode,
+        {
+            text: pix,
+            width: 220,
+            height: 220,
+            correctLevel:
+                QRCode.CorrectLevel.M
+        }
+    );
 
 
     /*
-       Mostra valor
+        Mostra PIX Copia e Cola
     */
 
-    document.getElementById(
-        "valorGerado"
-    ).textContent =
-        "Valor: " + formatarValor(valor);
+    const pixCopiaCola =
+        document.getElementById(
+            "pixCopiaCola"
+        );
+
+
+    if (pixCopiaCola) {
+
+        pixCopiaCola.textContent =
+            pix;
+
+    }
 
 
     /*
-       Mostra resultado
+        Mostra valor
     */
 
-    document.getElementById(
-        "resultado"
-    ).style.display = "block";
+    const valorGerado =
+        document.getElementById(
+            "valorGerado"
+        );
+
+
+    if (valorGerado) {
+
+        valorGerado.textContent =
+            "Valor: " +
+            formatarValor(valor);
+
+    }
 
 
     /*
-       Mensagem
+        Mostra resultado
+    */
+
+    const resultado =
+        document.getElementById(
+            "resultado"
+        );
+
+
+    if (resultado) {
+
+        resultado.style.display =
+            "block";
+
+    }
+
+
+    /*
+        Mensagem
     */
 
     mensagem.innerHTML =
@@ -354,19 +529,21 @@ function gerarPix(){
 
 
     /*
-       Rola suavemente até o resultado
+        Rola até o resultado
     */
 
-    setTimeout(function(){
+    if (resultado) {
 
-        document
-            .getElementById("resultado")
-            .scrollIntoView({
-                behavior:"smooth",
-                block:"start"
+        setTimeout(function () {
+
+            resultado.scrollIntoView({
+                behavior: "smooth",
+                block: "start"
             });
 
-    },150);
+        }, 150);
+
+    }
 
 }
 
@@ -375,28 +552,34 @@ function gerarPix(){
    COPIAR CHAVE PIX
 ========================================================= */
 
-function copiarChave(){
+function copiarChave() {
+
+    const mensagem =
+        document.getElementById(
+            "mensagem"
+        );
+
 
     /*
-       No código do PIX, CNPJ deve ser utilizado
-       somente com números.
+        Copia somente os números,
+        que é a forma correta da chave CNPJ
+        dentro do payload Pix.
     */
 
     const chave =
         PIX_CHAVE;
 
 
-    copiarTexto(chave, function(){
+    copiarTexto(
+        chave,
+        function () {
 
-        const mensagem =
-            document.getElementById("mensagem");
+            mensagem.innerHTML =
+                "✓ Chave PIX copiada!<br>" +
+                "Abra o aplicativo do seu banco de preferência e efetue o pagamento.";
 
-
-        mensagem.innerHTML =
-            "✓ Chave PIX copiada!<br>" +
-            "Abra o aplicativo do seu banco de preferência e efetue o pagamento.";
-
-    });
+        }
+    );
 
 }
 
@@ -405,7 +588,7 @@ function copiarChave(){
    COPIAR PIX COPIA E COLA
 ========================================================= */
 
-function copiarPix(){
+function copiarPix() {
 
     const elemento =
         document.getElementById(
@@ -413,28 +596,43 @@ function copiarPix(){
         );
 
 
-    const pix =
-        elemento.textContent.trim();
+    const mensagem =
+        document.getElementById(
+            "mensagem"
+        );
 
 
-    if(!pix){
+    if (!elemento) {
 
         return;
 
     }
 
 
-    copiarTexto(pix, function(){
+    const pix =
+        elemento.textContent.trim();
 
-        const mensagem =
-            document.getElementById("mensagem");
 
+    if (!pix) {
 
         mensagem.innerHTML =
-            "✓ PIX Copia e Cola copiado!<br>" +
-            "Abra o aplicativo do seu banco de preferência e cole o código para efetuar o pagamento.";
+            "Gere o PIX primeiro.";
 
-    });
+        return;
+
+    }
+
+
+    copiarTexto(
+        pix,
+        function () {
+
+            mensagem.innerHTML =
+                "✓ PIX Copia e Cola copiado!<br>" +
+                "Abra o aplicativo do seu banco de preferência e cole o código para efetuar o pagamento.";
+
+        }
+    );
 
 }
 
@@ -443,21 +641,24 @@ function copiarPix(){
    FUNÇÃO UNIVERSAL DE CÓPIA
 ========================================================= */
 
-function copiarTexto(texto, sucesso){
+function copiarTexto(
+    texto,
+    sucesso
+) {
 
     /*
-       Método moderno
+        Método moderno
     */
 
-    if(
+    if (
         navigator.clipboard &&
         window.isSecureContext
-    ){
+    ) {
 
         navigator.clipboard
             .writeText(texto)
             .then(sucesso)
-            .catch(function(){
+            .catch(function () {
 
                 copiarFallback(
                     texto,
@@ -472,7 +673,7 @@ function copiarTexto(texto, sucesso){
 
 
     /*
-       Método alternativo
+        Método alternativo
     */
 
     copiarFallback(
@@ -487,17 +688,26 @@ function copiarTexto(texto, sucesso){
    FALLBACK PARA COPIAR
 ========================================================= */
 
-function copiarFallback(texto, sucesso){
+function copiarFallback(
+    texto,
+    sucesso
+) {
 
     const textarea =
-        document.createElement("textarea");
+        document.createElement(
+            "textarea"
+        );
 
 
-    textarea.value = texto;
+    textarea.value =
+        texto;
 
 
     textarea.style.position =
         "fixed";
+
+    textarea.style.left =
+        "-9999px";
 
     textarea.style.opacity =
         "0";
@@ -513,17 +723,31 @@ function copiarFallback(texto, sucesso){
     textarea.select();
 
 
-    try{
+    try {
 
-        document.execCommand(
-            "copy"
-        );
+        const resultado =
+            document.execCommand(
+                "copy"
+            );
 
-        sucesso();
+
+        if (resultado) {
+
+            sucesso();
+
+        }
+
+        else {
+
+            throw new Error(
+                "Falha ao copiar"
+            );
+
+        }
 
     }
 
-    catch(error){
+    catch (error) {
 
         const mensagem =
             document.getElementById(
@@ -531,9 +755,13 @@ function copiarFallback(texto, sucesso){
             );
 
 
-        mensagem.innerHTML =
-            "Não foi possível copiar automaticamente. " +
-            "Toque e segure o código para copiá-lo.";
+        if (mensagem) {
+
+            mensagem.innerHTML =
+                "Não foi possível copiar automaticamente. " +
+                "Toque e segure o código para copiá-lo.";
+
+        }
 
     }
 
@@ -549,17 +777,35 @@ function copiarFallback(texto, sucesso){
    ENTER NO CAMPO DE VALOR
 ========================================================= */
 
-document
-    .getElementById("valor")
-    .addEventListener(
-        "keydown",
-        function(event){
+document.addEventListener(
+    "DOMContentLoaded",
+    function () {
 
-            if(event.key === "Enter"){
+        const campoValor =
+            document.getElementById(
+                "valor"
+            );
 
-                gerarPix();
 
-            }
+        if (campoValor) {
+
+            campoValor.addEventListener(
+                "keydown",
+                function (event) {
+
+                    if (
+                        event.key ===
+                        "Enter"
+                    ) {
+
+                        gerarPix();
+
+                    }
+
+                }
+            );
 
         }
-    );
+
+    }
+);
