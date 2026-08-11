@@ -1,25 +1,12 @@
 /* =========================================================
-   TAGG CONNECT
-   GERADOR PIX COPIA E COLA + QR CODE
-
-   PARA NOVOS CLIENTES, ALTERE SOMENTE:
-
-   PIX_CHAVE
-   BENEFICIARIO
-   CIDADE
-
+   CONFIGURAÇÕES DA D PRINT
 ========================================================= */
 
+const PIX_CHAVE = "39494949000120";
 
-/* =========================================================
-   DADOS DO CLIENTE
-========================================================= */
+const BENEFICIARIO = "D PRINT COMUNICACAO VISUA";
 
-const PIX_CHAVE = "06780251348";
-
-const BENEFICIARIO = "FRANCISCO A DA SILVA";
-
-const CIDADE = "TABULEIRO DO";
+const CIDADE = "TABULEIRO";
 
 const TXID = "***";
 
@@ -31,50 +18,40 @@ const TXID = "***";
 function formatarValor(valor) {
 
     return Number(valor).toLocaleString("pt-BR", {
-
         style: "currency",
-
         currency: "BRL"
-
     });
 
 }
 
 
 /* =========================================================
-   CONVERTE VALOR
+   CONVERTE VALOR DIGITADO
 ========================================================= */
 
 function converterValor(valor) {
 
-    valor = String(valor || "").trim();
+    valor = String(valor).trim();
 
     if (!valor) {
-
         return NaN;
-
     }
-
 
     valor = valor.replace(/\s/g, "");
 
-
     /*
-        Exemplos aceitos:
+        Aceita:
 
         10
         10,00
         10.00
         1.500,50
+        1500,50
     */
 
-    if (
-        valor.includes(",") &&
-        valor.includes(".")
-    ) {
+    if (valor.includes(",") && valor.includes(".")) {
 
         valor = valor.replace(/\./g, "");
-
         valor = valor.replace(",", ".");
 
     }
@@ -85,188 +62,17 @@ function converterValor(valor) {
 
     }
 
-
     return parseFloat(valor);
 
 }
 
 
 /* =========================================================
-   REMOVE ACENTOS
-========================================================= */
-
-function removerAcentos(texto) {
-
-    return String(texto || "")
-        .normalize("NFD")
-        .replace(/[\u0300-\u036f]/g, "");
-
-}
-
-
-/* =========================================================
-   LIMPA TEXTO DO BR CODE
-========================================================= */
-
-function prepararTexto(texto, limite) {
-
-    texto = removerAcentos(texto);
-
-    /*
-        O BR Code utiliza caracteres simples.
-        Transformamos em maiúsculas.
-    */
-
-    texto = texto
-        .toUpperCase()
-        .replace(/\s+/g, " ")
-        .trim();
-
-
-    /*
-        Limite máximo do campo.
-    */
-
-    if (texto.length > limite) {
-
-        texto = texto.substring(0, limite);
-
-    }
-
-
-    return texto;
-
-}
-
-
-/* =========================================================
-   NORMALIZA CHAVE PIX
-
-   Aceita:
-
-   CNPJ:
-   39.494.949/0001-20
-
-   CPF:
-   123.456.789-00
-
-   Telefone:
-   (88) 92180-1646
-
-   E-mail:
-   empresa@email.com
-
-   Chave aleatória:
-   mantém como informada.
-========================================================= */
-
-function prepararChave(chave) {
-
-    chave = String(chave || "").trim();
-
-
-    /*
-        Detecta telefone brasileiro formatado
-        ou somente números.
-    */
-
-    const numeros =
-        chave.replace(/\D/g, "");
-
-
-    /*
-        Telefone brasileiro com DDD
-        11 dígitos.
-
-        Exemplo:
-
-        88921801646
-
-        vira:
-
-        +5588921801646
-    */
-
-    if (numeros.length === 11) {
-
-        return "+55" + numeros;
-
-    }
-
-
-    /*
-        Telefone já com código do Brasil.
-
-        Exemplo:
-
-        5588921801646
-
-        vira:
-
-        +5588921801646
-    */
-
-    if (
-        numeros.length === 13 &&
-        numeros.startsWith("55")
-    ) {
-
-        return "+" + numeros;
-
-    }
-
-
-    /*
-        CNPJ
-
-        Remove pontuação.
-    */
-
-    if (numeros.length === 14) {
-
-        return numeros;
-
-    }
-
-
-    /*
-        CPF
-
-        Remove pontuação.
-    */
-
-    if (numeros.length === 11) {
-
-        return numeros;
-
-    }
-
-
-    /*
-        E-mail ou chave aleatória.
-
-        Mantém como cadastrada.
-    */
-
-    return chave;
-
-}
-
-
-/* =========================================================
-   CRIA CAMPO EMV
+   CRIA CAMPO EMV/BR CODE
 
    Estrutura:
 
    ID + TAMANHO + VALOR
-
-   Exemplo:
-
-   campoPix("00", "01")
-
-   resulta:
-
-   000201
 ========================================================= */
 
 function campoPix(id, valor) {
@@ -274,16 +80,6 @@ function campoPix(id, valor) {
     valor = String(valor);
 
     const tamanho = valor.length;
-
-
-    if (tamanho > 99) {
-
-        throw new Error(
-            "Campo PIX excede 99 caracteres."
-        );
-
-    }
-
 
     return (
         id +
@@ -295,59 +91,38 @@ function campoPix(id, valor) {
 
 
 /* =========================================================
-   CRC16-CCITT-FALSE
+   CRC16 CCITT-FALSE
 
-   POLINÔMIO:
-   0x1021
-
-   VALOR INICIAL:
-   0xFFFF
+   Padrão utilizado pelo BR Code Pix
 ========================================================= */
 
 function crc16(payload) {
 
     let crc = 0xFFFF;
 
+    for (let i = 0; i < payload.length; i++) {
 
-    for (
-        let i = 0;
-        i < payload.length;
-        i++
-    ) {
+        crc ^= payload.charCodeAt(i) << 8;
 
-        crc ^= payload.charCodeAt(i);
+        for (let j = 0; j < 8; j++) {
 
-
-        for (
-            let j = 0;
-            j < 8;
-            j++
-        ) {
-
-            if (
-                (crc & 0x8000) !== 0
-            ) {
+            if ((crc & 0x8000) !== 0) {
 
                 crc =
-                    (
-                        (crc << 1) ^
-                        0x1021
-                    ) & 0xFFFF;
+                    ((crc << 1) ^ 0x1021) & 0xFFFF;
 
             }
 
             else {
 
                 crc =
-                    (crc << 1) &
-                    0xFFFF;
+                    (crc << 1) & 0xFFFF;
 
             }
 
         }
 
     }
-
 
     return crc
         .toString(16)
@@ -358,80 +133,46 @@ function crc16(payload) {
 
 
 /* =========================================================
-   MONTA PIX
-
-   ESTRUTURA:
-
-   00 = Payload Format Indicator
-   01 = Point of Initiation Method
-   26 = Merchant Account Information
-   52 = MCC
-   53 = Moeda
-   54 = Valor
-   58 = País
-   59 = Beneficiário
-   60 = Cidade
-   62 = Dados adicionais / TXID
-   63 = CRC
+   MONTA O PIX COPIA E COLA
 ========================================================= */
 
 function montarPix(valor) {
 
-    /* -----------------------------------------------------
-       PREPARA DADOS
-    ----------------------------------------------------- */
+    /*
+        -----------------------------------------------------
+        MERCHANT ACCOUNT INFORMATION
 
-    const chave =
-        prepararChave(PIX_CHAVE);
+        Campo 26
 
-
-    const beneficiario =
-        prepararTexto(
-            BENEFICIARIO,
-            25
-        );
-
-
-    const cidade =
-        prepararTexto(
-            CIDADE,
-            15
-        );
-
-
-    /* -----------------------------------------------------
-       MERCHANT ACCOUNT INFORMATION
-
-       00 = GUI
-       01 = CHAVE PIX
-    ----------------------------------------------------- */
+        00 = GUI
+        01 = Chave Pix
+        -----------------------------------------------------
+    */
 
     const merchantAccountInformation =
-
         campoPix(
             "00",
             "br.gov.bcb.pix"
-        )
-
-        +
+        ) +
 
         campoPix(
             "01",
-            chave
+            PIX_CHAVE
         );
 
 
-    /* -----------------------------------------------------
-       PAYLOAD
-    ----------------------------------------------------- */
+    /*
+        -----------------------------------------------------
+        PAYLOAD
+        -----------------------------------------------------
+    */
 
     let payload = "";
 
 
-    /* -----------------------------------------------------
-       00
-       Payload Format Indicator
-    ----------------------------------------------------- */
+    /*
+        00 - Payload Format Indicator
+    */
 
     payload += campoPix(
         "00",
@@ -439,23 +180,9 @@ function montarPix(valor) {
     );
 
 
-    /* -----------------------------------------------------
-       01
-       Point of Initiation Method
-
-       11 = QR Code estático
-    ----------------------------------------------------- */
-
-    payload += campoPix(
-        "01",
-        "11"
-    );
-
-
-    /* -----------------------------------------------------
-       26
-       Merchant Account Information
-    ----------------------------------------------------- */
+    /*
+        26 - Merchant Account Information
+    */
 
     payload += campoPix(
         "26",
@@ -463,10 +190,11 @@ function montarPix(valor) {
     );
 
 
-    /* -----------------------------------------------------
-       52
-       Merchant Category Code
-    ----------------------------------------------------- */
+    /*
+        52 - Merchant Category Code
+
+        0000 = não especificado
+    */
 
     payload += campoPix(
         "52",
@@ -474,12 +202,11 @@ function montarPix(valor) {
     );
 
 
-    /* -----------------------------------------------------
-       53
-       Transaction Currency
+    /*
+        53 - Transaction Currency
 
-       986 = Real brasileiro
-    ----------------------------------------------------- */
+        986 = BRL
+    */
 
     payload += campoPix(
         "53",
@@ -487,21 +214,22 @@ function montarPix(valor) {
     );
 
 
-    /* -----------------------------------------------------
-       54
-       VALOR
-    ----------------------------------------------------- */
+    /*
+        54 - Transaction Amount
+
+        Exemplo:
+        10.00
+    */
 
     payload += campoPix(
         "54",
-        valor.toFixed(2)
+        Number(valor).toFixed(2)
     );
 
 
-    /* -----------------------------------------------------
-       58
-       COUNTRY CODE
-    ----------------------------------------------------- */
+    /*
+        58 - Country Code
+    */
 
     payload += campoPix(
         "58",
@@ -509,41 +237,36 @@ function montarPix(valor) {
     );
 
 
-    /* -----------------------------------------------------
-       59
-       MERCHANT NAME
-
-       Máximo 25 caracteres
-    ----------------------------------------------------- */
+    /*
+        59 - Merchant Name
+    */
 
     payload += campoPix(
         "59",
-        beneficiario
+        BENEFICIARIO
     );
 
 
-    /* -----------------------------------------------------
-       60
-       MERCHANT CITY
-
-       Máximo 15 caracteres
-    ----------------------------------------------------- */
+    /*
+        60 - Merchant City
+    */
 
     payload += campoPix(
         "60",
-        cidade
+        CIDADE
     );
 
 
-    /* -----------------------------------------------------
-       62
-       ADDITIONAL DATA FIELD
+    /*
+        62 - Additional Data Field Template
 
-       05 = TXID
-    ----------------------------------------------------- */
+        05 = TxId
+
+        *** = TxId padrão para QR Code estático
+        sem identificador específico.
+    */
 
     const additionalData =
-
         campoPix(
             "05",
             TXID
@@ -556,78 +279,38 @@ function montarPix(valor) {
     );
 
 
-    /* -----------------------------------------------------
-       63
-       CRC
+    /*
+        -----------------------------------------------------
+        CRC
 
-       O cálculo é feito incluindo:
+        O campo 63 é formado por:
 
-       6304
+        63
+        04
+        CRC
 
-       mas não incluindo o próprio CRC.
-    ----------------------------------------------------- */
+        Para calcular o CRC, acrescentamos primeiro:
+
+        6304
+        -----------------------------------------------------
+    */
 
     payload += "6304";
 
 
-    const crc =
-        crc16(payload);
+    /*
+        Calcula o CRC sobre todo o payload
+        até o campo 6304.
+    */
+
+    const crc = crc16(payload);
 
 
-    /* -----------------------------------------------------
-       PIX FINAL
-    ----------------------------------------------------- */
+    /*
+        Retorna o PIX Copia e Cola completo
+    */
 
     return payload + crc;
-
-}
-
-
-/* =========================================================
-   VALIDA CRC DO PIX
-
-   Antes de gerar o QR Code, conferimos se o próprio
-   payload está matematicamente consistente.
-========================================================= */
-
-function validarCRC(pix) {
-
-    if (!pix || pix.length < 8) {
-
-        return false;
-
-    }
-
-
-    /*
-        Os últimos 4 caracteres são o CRC.
-    */
-
-    const crcInformado =
-        pix.substring(
-            pix.length - 4
-        );
-
-
-    /*
-        Remove o CRC e mantém 6304.
-    */
-
-    const payload =
-        pix.substring(
-            0,
-            pix.length - 4
-        );
-
-
-    const crcCalculado =
-        crc16(payload);
-
-
-    return (
-        crcInformado ===
-        crcCalculado
-    );
 
 }
 
@@ -639,16 +322,41 @@ function validarCRC(pix) {
 function gerarPix() {
 
     const campoValor =
-        document.getElementById(
-            "valor"
-        );
-
+        document.getElementById("valor");
 
     const mensagem =
-        document.getElementById(
-            "mensagem"
+        document.getElementById("mensagem");
+
+
+    /*
+        Verifica se os elementos existem
+    */
+
+    if (!campoValor) {
+
+        console.error(
+            "Campo #valor não encontrado."
         );
 
+        return;
+
+    }
+
+
+    if (!mensagem) {
+
+        console.error(
+            "Elemento #mensagem não encontrado."
+        );
+
+        return;
+
+    }
+
+
+    /*
+        Converte o valor
+    */
 
     const valor =
         converterValor(
@@ -656,9 +364,9 @@ function gerarPix() {
         );
 
 
-    /* -----------------------------------------------------
-       VALIDA VALOR
-    ----------------------------------------------------- */
+    /*
+        Validação
+    */
 
     if (
         isNaN(valor) ||
@@ -673,143 +381,167 @@ function gerarPix() {
     }
 
 
-    try {
+    /*
+        Gera o PIX Copia e Cola
+    */
 
-        /* -------------------------------------------------
-           MONTA PAYLOAD
-        ------------------------------------------------- */
-
-        const pix =
-            montarPix(valor);
+    const pix =
+        montarPix(valor);
 
 
-        /* -------------------------------------------------
-           VALIDA CRC
-        ------------------------------------------------- */
+    /*
+        Exibe no console para conferência
 
-        if (!validarCRC(pix)) {
+        F12 → Console
+    */
 
-            throw new Error(
-                "CRC inválido."
-            );
+    console.log(
+        "PIX Copia e Cola:",
+        pix
+    );
 
-        }
+
+    /*
+        QR CODE
+    */
+
+    const qrcode =
+        document.getElementById("qrcode");
 
 
-        console.log(
-            "PIX GERADO:",
-            pix
+    if (!qrcode) {
+
+        console.error(
+            "Elemento #qrcode não encontrado."
         );
 
-
-        /* -------------------------------------------------
-           LIMPA QR CODE ANTERIOR
-        ------------------------------------------------- */
-
-        const qrcode =
-            document.getElementById(
-                "qrcode"
-            );
-
-
-        qrcode.innerHTML = "";
-
-
-        /* -------------------------------------------------
-           GERA QR CODE
-        ------------------------------------------------- */
-
-        new QRCode(
-            qrcode,
-            {
-
-                text: pix,
-
-                width: 220,
-
-                height: 220,
-
-                correctLevel:
-                    QRCode.CorrectLevel.M
-
-            }
-        );
-
-
-        /* -------------------------------------------------
-           PIX COPIA E COLA
-        ------------------------------------------------- */
-
-        document.getElementById(
-            "pixCopiaCola"
-        ).textContent = pix;
-
-
-        /* -------------------------------------------------
-           VALOR
-        ------------------------------------------------- */
-
-        document.getElementById(
-            "valorGerado"
-        ).textContent =
-            "Valor: " +
-            formatarValor(valor);
-
-
-        /* -------------------------------------------------
-           MOSTRA RESULTADO
-        ------------------------------------------------- */
-
-        document.getElementById(
-            "resultado"
-        ).style.display = "block";
-
-
-        /* -------------------------------------------------
-           MENSAGEM
-        ------------------------------------------------- */
-
-        mensagem.innerHTML =
-            "✓ PIX gerado com sucesso!<br>" +
-            "Escaneie o QR Code ou copie o PIX Copia e Cola.";
-
-
-        /* -------------------------------------------------
-           SCROLL
-        ------------------------------------------------- */
-
-        setTimeout(
-            function() {
-
-                document
-                    .getElementById(
-                        "resultado"
-                    )
-                    .scrollIntoView({
-
-                        behavior: "smooth",
-
-                        block: "start"
-
-                    });
-
-            },
-            150
-        );
+        return;
 
     }
 
-    catch (erro) {
+
+    /*
+        Limpa QR Code anterior
+    */
+
+    qrcode.innerHTML = "";
+
+
+    /*
+        Verifica biblioteca QRCode
+    */
+
+    if (
+        typeof QRCode ===
+        "undefined"
+    ) {
+
+        mensagem.innerHTML =
+            "Erro: biblioteca do QR Code não carregada.";
 
         console.error(
-            "Erro ao gerar PIX:",
-            erro
+            "QRCode.js não foi carregado."
+        );
+
+        return;
+
+    }
+
+
+    /*
+        Gera QR Code
+    */
+
+    new QRCode(
+        qrcode,
+        {
+            text: pix,
+            width: 220,
+            height: 220,
+            correctLevel:
+                QRCode.CorrectLevel.M
+        }
+    );
+
+
+    /*
+        Mostra PIX Copia e Cola
+    */
+
+    const pixCopiaCola =
+        document.getElementById(
+            "pixCopiaCola"
         );
 
 
-        mensagem.innerHTML =
-            "Não foi possível gerar o PIX. " +
-            "Confira os dados cadastrados.";
+    if (pixCopiaCola) {
+
+        pixCopiaCola.textContent =
+            pix;
+
+    }
+
+
+    /*
+        Mostra valor
+    */
+
+    const valorGerado =
+        document.getElementById(
+            "valorGerado"
+        );
+
+
+    if (valorGerado) {
+
+        valorGerado.textContent =
+            "Valor: " +
+            formatarValor(valor);
+
+    }
+
+
+    /*
+        Mostra resultado
+    */
+
+    const resultado =
+        document.getElementById(
+            "resultado"
+        );
+
+
+    if (resultado) {
+
+        resultado.style.display =
+            "block";
+
+    }
+
+
+    /*
+        Mensagem
+    */
+
+    mensagem.innerHTML =
+        "✓ PIX gerado com sucesso!<br>" +
+        "Escaneie o QR Code ou copie o PIX Copia e Cola.";
+
+
+    /*
+        Rola até o resultado
+    */
+
+    if (resultado) {
+
+        setTimeout(function () {
+
+            resultado.scrollIntoView({
+                behavior: "smooth",
+                block: "start"
+            });
+
+        }, 150);
 
     }
 
@@ -822,30 +554,31 @@ function gerarPix() {
 
 function copiarChave() {
 
-    const chave =
-        prepararChave(
-            PIX_CHAVE
+    const mensagem =
+        document.getElementById(
+            "mensagem"
         );
 
 
+    /*
+        Copia somente os números,
+        que é a forma correta da chave CNPJ
+        dentro do payload Pix.
+    */
+
+    const chave =
+        PIX_CHAVE;
+
+
     copiarTexto(
-
         chave,
-
-        function() {
-
-            const mensagem =
-                document.getElementById(
-                    "mensagem"
-                );
-
+        function () {
 
             mensagem.innerHTML =
                 "✓ Chave PIX copiada!<br>" +
                 "Abra o aplicativo do seu banco de preferência e efetue o pagamento.";
 
         }
-
     );
 
 }
@@ -863,11 +596,27 @@ function copiarPix() {
         );
 
 
+    const mensagem =
+        document.getElementById(
+            "mensagem"
+        );
+
+
+    if (!elemento) {
+
+        return;
+
+    }
+
+
     const pix =
         elemento.textContent.trim();
 
 
     if (!pix) {
+
+        mensagem.innerHTML =
+            "Gere o PIX primeiro.";
 
         return;
 
@@ -875,30 +624,21 @@ function copiarPix() {
 
 
     copiarTexto(
-
         pix,
-
-        function() {
-
-            const mensagem =
-                document.getElementById(
-                    "mensagem"
-                );
-
+        function () {
 
             mensagem.innerHTML =
                 "✓ PIX Copia e Cola copiado!<br>" +
                 "Abra o aplicativo do seu banco de preferência e cole o código para efetuar o pagamento.";
 
         }
-
     );
 
 }
 
 
 /* =========================================================
-   COPIAR TEXTO
+   FUNÇÃO UNIVERSAL DE CÓPIA
 ========================================================= */
 
 function copiarTexto(
@@ -906,20 +646,19 @@ function copiarTexto(
     sucesso
 ) {
 
+    /*
+        Método moderno
+    */
+
     if (
-
         navigator.clipboard &&
-
         window.isSecureContext
-
     ) {
 
         navigator.clipboard
             .writeText(texto)
-
             .then(sucesso)
-
-            .catch(function() {
+            .catch(function () {
 
                 copiarFallback(
                     texto,
@@ -928,11 +667,14 @@ function copiarTexto(
 
             });
 
-
         return;
 
     }
 
+
+    /*
+        Método alternativo
+    */
 
     copiarFallback(
         texto,
@@ -943,7 +685,7 @@ function copiarTexto(
 
 
 /* =========================================================
-   FALLBACK
+   FALLBACK PARA COPIAR
 ========================================================= */
 
 function copiarFallback(
@@ -964,6 +706,8 @@ function copiarFallback(
     textarea.style.position =
         "fixed";
 
+    textarea.style.left =
+        "-9999px";
 
     textarea.style.opacity =
         "0";
@@ -981,16 +725,29 @@ function copiarFallback(
 
     try {
 
-        document.execCommand(
-            "copy"
-        );
+        const resultado =
+            document.execCommand(
+                "copy"
+            );
 
 
-        sucesso();
+        if (resultado) {
+
+            sucesso();
+
+        }
+
+        else {
+
+            throw new Error(
+                "Falha ao copiar"
+            );
+
+        }
 
     }
 
-    catch (erro) {
+    catch (error) {
 
         const mensagem =
             document.getElementById(
@@ -998,9 +755,13 @@ function copiarFallback(
             );
 
 
-        mensagem.innerHTML =
-            "Não foi possível copiar automaticamente. " +
-            "Toque e segure o código para copiá-lo.";
+        if (mensagem) {
+
+            mensagem.innerHTML =
+                "Não foi possível copiar automaticamente. " +
+                "Toque e segure o código para copiá-lo.";
+
+        }
 
     }
 
@@ -1016,30 +777,35 @@ function copiarFallback(
    ENTER NO CAMPO DE VALOR
 ========================================================= */
 
-const campoValor =
-    document.getElementById(
-        "valor"
-    );
+document.addEventListener(
+    "DOMContentLoaded",
+    function () {
+
+        const campoValor =
+            document.getElementById(
+                "valor"
+            );
 
 
-if (campoValor) {
+        if (campoValor) {
 
-    campoValor.addEventListener(
+            campoValor.addEventListener(
+                "keydown",
+                function (event) {
 
-        "keydown",
+                    if (
+                        event.key ===
+                        "Enter"
+                    ) {
 
-        function(event) {
+                        gerarPix();
 
-            if (
-                event.key === "Enter"
-            ) {
+                    }
 
-                gerarPix();
-
-            }
+                }
+            );
 
         }
 
-    );
-
-}
+    }
+);
