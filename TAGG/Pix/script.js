@@ -2,7 +2,7 @@
    CONFIGURAÇÕES DA TAGG
 ========================================================= */
 
-const PIX_CHAVE = "88921801646";
+const PIX_CHAVE = "+5588921801646";
 
 const BENEFICIARIO = "FRANCISCO ANTONIO DA SILVA";
 
