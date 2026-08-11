@@ -34,7 +34,9 @@ body{
 }
 
 
-/* LOGO */
+/* =========================================================
+   LOGO
+========================================================= */
 
 .logo-area{
 
@@ -44,29 +46,25 @@ body{
 
     align-items:center;
 
-    margin-bottom:20px;
+    margin-bottom:25px;
 
 }
 
 
 .logo{
 
-    display:block;
+    max-width:180px;
 
-    max-width:190px;
-
-    max-height:85px;
-
-    width:auto;
-
-    height:auto;
+    max-height:90px;
 
     object-fit:contain;
 
 }
 
 
-/* TÍTULO */
+/* =========================================================
+   TÍTULO
+========================================================= */
 
 h1{
 
@@ -76,16 +74,20 @@ h1{
 
     margin-bottom:10px;
 
+    color:#FFFFFF;
+
 }
 
 
-/* DESCRIÇÃO */
+/* =========================================================
+   DESCRIÇÃO
+========================================================= */
 
 .descricao{
 
     text-align:center;
 
-    color:#bfbfbf;
+    color:#BFBFBF;
 
     margin-bottom:35px;
 
@@ -94,16 +96,20 @@ h1{
 }
 
 
-/* CAMPOS */
+/* =========================================================
+   CAMPOS
+========================================================= */
 
 .campo{
 
-    margin-bottom:24px;
+    margin-bottom:28px;
 
 }
 
 
-/* TÍTULOS */
+/* =========================================================
+   TÍTULOS DOS CAMPOS
+========================================================= */
 
 label{
 
@@ -111,16 +117,18 @@ label{
 
     text-align:center;
 
-    margin-bottom:10px;
+    margin-bottom:12px;
 
     font-size:15px;
 
-    color:#bdbdbd;
+    color:#BDBDBD;
 
 }
 
 
-/* CAIXAS */
+/* =========================================================
+   CAIXAS DE INFORMAÇÃO
+========================================================= */
 
 .caixa{
 
@@ -128,7 +136,7 @@ label{
 
     border-radius:18px;
 
-    padding:17px;
+    padding:18px;
 
     display:flex;
 
@@ -136,11 +144,11 @@ label{
 
     align-items:center;
 
-    font-size:19px;
+    font-size:20px;
 
     font-weight:bold;
 
-    color:#39FF00;
+    color:#C9A227;
 
     text-align:center;
 
@@ -149,7 +157,9 @@ label{
 }
 
 
-/* CHAVE PIX */
+/* =========================================================
+   ÁREA DA CHAVE PIX
+========================================================= */
 
 .chave{
 
@@ -166,13 +176,17 @@ label{
 }
 
 
+/* =========================================================
+   TEXTO DA CHAVE
+========================================================= */
+
 .chave-texto{
 
-    font-size:21px;
+    font-size:22px;
 
     font-weight:bold;
 
-    color:#39FF00;
+    color:#C9A227;
 
     text-align:center;
 
@@ -181,7 +195,9 @@ label{
 }
 
 
-/* BOTÕES DE ÍCONE */
+/* =========================================================
+   BOTÃO / ÍCONE COPIAR
+========================================================= */
 
 button{
 
@@ -193,7 +209,7 @@ button{
 
     cursor:pointer;
 
-    color:#39FF00;
+    color:#C9A227;
 
     display:flex;
 
@@ -201,7 +217,7 @@ button{
 
     align-items:center;
 
-    padding:6px;
+    padding:5px;
 
     transition:0.25s;
 
@@ -210,12 +226,16 @@ button{
 
 button:hover{
 
-    transform:scale(1.10);
+    transform:scale(1.12);
+
+    color:#E0B82F;
 
 }
 
 
-/* CAMPO DO VALOR */
+/* =========================================================
+   ÁREA DO VALOR
+========================================================= */
 
 .valor-area{
 
@@ -223,7 +243,7 @@ button:hover{
 
     border-radius:18px;
 
-    padding:5px 18px;
+    padding:16px 20px;
 
     display:flex;
 
@@ -231,18 +251,18 @@ button:hover{
 
     justify-content:center;
 
+    gap:8px;
+
 }
 
 
 .simbolo{
 
-    color:#39FF00;
-
-    font-size:24px;
+    font-size:22px;
 
     font-weight:bold;
 
-    margin-right:8px;
+    color:#C9A227;
 
 }
 
@@ -251,87 +271,94 @@ button:hover{
 
     width:100%;
 
-    background:transparent;
+    background:none;
 
     border:none;
 
     outline:none;
 
-    color:#39FF00;
+    color:#FFFFFF;
 
-    font-size:27px;
+    font-size:24px;
 
     font-weight:bold;
 
     text-align:center;
-
-    padding:13px 5px;
 
 }
 
 
 #valor::placeholder{
 
-    color:#777;
+    color:#666666;
 
 }
 
 
-#valor:focus{
-
-    outline:none;
-
-}
-
-
-/* BOTÃO GERAR PIX */
+/* =========================================================
+   BOTÃO GERAR PIX
+========================================================= */
 
 .botao-gerar{
 
     width:100%;
 
-    background:#39FF00;
+    background:#C9A227;
 
-    color:#111;
+    color:#111111;
 
-    border-radius:18px;
+    border:none;
+
+    border-radius:16px;
 
     padding:17px;
 
-    font-size:17px;
+    font-size:16px;
 
     font-weight:bold;
 
-    letter-spacing:.5px;
+    letter-spacing:0.5px;
 
-    margin-top:4px;
+    cursor:pointer;
 
-    transition:.25s;
+    transition:0.25s;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
 
 }
 
 
 .botao-gerar:hover{
 
-    transform:translateY(-2px) scale(1.01);
+    background:#E0B82F;
+
+    transform:translateY(-2px);
 
 }
 
 
-/* RESULTADO */
+/* =========================================================
+   RESULTADO
+========================================================= */
 
 .resultado{
 
     display:none;
 
-    margin-top:30px;
+    margin-top:35px;
 
     text-align:center;
 
 }
 
 
-/* QR CODE */
+/* =========================================================
+   QR CODE
+========================================================= */
 
 .qrcode{
 
@@ -341,61 +368,60 @@ button:hover{
 
     align-items:center;
 
-    background:white;
+    margin:0 auto 20px auto;
 
-    width:max-content;
-
-    margin:0 auto 20px;
+    background:#FFFFFF;
 
     padding:14px;
+
+    width:max-content;
 
     border-radius:18px;
 
 }
 
 
-.qrcode img{
-
-    display:block;
-
-}
-
-
-/* VALOR GERADO */
+/* =========================================================
+   VALOR GERADO
+========================================================= */
 
 .valor-gerado{
-
-    color:#39FF00;
 
     font-size:20px;
 
     font-weight:bold;
 
-    margin-bottom:25px;
+    color:#C9A227;
+
+    margin-bottom:22px;
 
 }
 
 
-/* TÍTULO COPIA E COLA */
+/* =========================================================
+   TÍTULO PIX COPIA E COLA
+========================================================= */
 
 .copia-cola-titulo{
 
-    color:#bdbdbd;
+    font-size:14px;
 
-    font-size:15px;
+    color:#BFBFBF;
 
-    margin-bottom:10px;
+    margin-bottom:12px;
 
 }
 
 
-/* COPIA E COLA */
+/* =========================================================
+   PIX COPIA E COLA
+========================================================= */
 
 .copia-cola{
 
     background:#242424;
 
-    border-radius:18px;
+    border-radius:16px;
 
     padding:15px;
 
@@ -414,37 +440,54 @@ button:hover{
 
     flex:1;
 
-    color:#bfbfbf;
+    color:#D8D8D8;
 
     font-size:12px;
 
-    line-height:1.4;
+    line-height:1.5;
 
     word-break:break-all;
 
-    max-height:65px;
+    max-height:100px;
 
     overflow:auto;
 
 }
 
 
+/* =========================================================
+   BOTÃO COPIAR PIX
+========================================================= */
+
 .botao-copiar{
+
+    color:#C9A227;
 
     flex-shrink:0;
 
 }
 
 
-/* MENSAGEM */
+.botao-copiar:hover{
+
+    color:#E0B82F;
+
+    transform:scale(1.12);
+
+}
+
+
+/* =========================================================
+   MENSAGEM
+========================================================= */
 
 #mensagem{
 
-    margin-top:18px;
+    margin-top:20px;
 
     text-align:center;
 
-    color:#39FF00;
+    color:#C9A227;
 
     font-size:14px;
 
@@ -453,66 +496,5 @@ button:hover{
     min-height:45px;
 
     padding:0 10px;
-
-}
-
-
-/* CELULAR */
-
-@media(max-width:480px){
-
-    body{
-
-        padding:20px 16px;
-
-        align-items:flex-start;
-
-        padding-top:30px;
-
-    }
-
-
-    .container{
-
-        max-width:420px;
-
-    }
-
-
-    h1{
-
-        font-size:27px;
-
-    }
-
-
-    .descricao{
-
-        margin-bottom:30px;
-
-    }
-
-
-    .caixa{
-
-        font-size:17px;
-
-    }
-
-
-    .chave-texto{
-
-        font-size:18px;
-
-    }
-
-
-    .logo{
-
-        max-width:170px;
-
-        max-height:75px;
-
-    }
 
 }
