@@ -114,23 +114,21 @@ function normalizarTexto(texto, limite){
 
     texto = texto
         .toUpperCase()
-        .replace(/\s+/g," ")
-        .trim();
+        .replace(/\s+/g," ");
 
     /*
-        Merchant Name:
-        máximo 25 caracteres.
-
-        Merchant City:
-        máximo 15 caracteres.
+        Remove espaços apenas do INÍCIO.
+        Mantém o espaço final quando necessário
+        para reproduzir o BR Code do banco.
     */
+
+    texto = texto.replace(/^\s+/,"");
 
     if(texto.length > limite){
 
         texto = texto.substring(0, limite);
 
     }
-
 
     return texto;
 
