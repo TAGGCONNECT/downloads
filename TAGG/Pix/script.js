@@ -574,8 +574,7 @@ function gerarPix(){
             MONTA PIX
         */
 
-        const pix =
-            montarPix(valor);
+        const pix = "00020101021126360014br.gov.bcb.pix0114+5588921801646520400005303986540510.005802BR5920FRANCISCO A DA SILVA6013TABULEIRO DO 62070503***6304E50F";
 
 
         /*
