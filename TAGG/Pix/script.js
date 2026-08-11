@@ -1,8 +1,8 @@
 /* =========================================================
-   CONFIGURAÇÕES DA D PRINT
+   CONFIGURAÇÕES DA TAGG
 ========================================================= */
 
-const PIX_CHAVE = "06780251348";
+const PIX_CHAVE = "88921801646";
 
 const BENEFICIARIO = "FRANCISCO ANTONIO DA SILVA";
 
