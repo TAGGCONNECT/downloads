@@ -15,7 +15,7 @@
    DADOS DO CLIENTE
 ========================================================= */
 
-const PIX_CHAVE = "+5588921801646";
+const PIX_CHAVE = "06780251348";
 
 const BENEFICIARIO = "FRANCISCO A DA SILVA";
 
