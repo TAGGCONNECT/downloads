@@ -140,7 +140,7 @@ label{
 
     font-weight:bold;
 
-    color:#39FF00;
+    color:#1683FF;
 
     text-align:center;
 
@@ -172,7 +172,7 @@ label{
 
     font-weight:bold;
 
-    color:#39FF00;
+    color:#1683FF;
 
     text-align:center;
 
@@ -193,7 +193,7 @@ button{
 
     cursor:pointer;
 
-    color:#39FF00;
+    color:#1683FF;
 
     display:flex;
 
@@ -236,7 +236,7 @@ button:hover{
 
 .simbolo{
 
-    color:#39FF00;
+    color:#1683FF;
 
     font-size:24px;
 
@@ -257,7 +257,7 @@ button:hover{
 
     outline:none;
 
-    color:#39FF00;
+    color:#1683FF;
 
     font-size:27px;
 
@@ -290,7 +290,7 @@ button:hover{
 
     width:100%;
 
-    background:#39FF00;
+    background:#1683FF;
 
     color:#111;
 
@@ -365,7 +365,7 @@ button:hover{
 
 .valor-gerado{
 
-    color:#39FF00;
+    color:#1683FF;
 
     font-size:20px;
 
@@ -444,7 +444,7 @@ button:hover{
 
     text-align:center;
 
-    color:#39FF00;
+    color:#1683FF;
 
     font-size:14px;
 
