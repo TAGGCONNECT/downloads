@@ -1,1 +1,297 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Pagamento via PIX | Multiverso Seven</title>
+
+    <link rel="stylesheet" href="style.css">
+
+</head>
+
+
+<body>
+
+<div class="container">
+
+
+    <!-- LOGO -->
+    <div class="logo-area">
+
+        <img
+            src="logo.png"
+            alt="Multiverso Seven"
+            class="logo"
+        >
+
+    </div>
+
+
+    <!-- TÍTULO -->
+    <h1>
+        Pagamento via PIX
+    </h1>
+
+
+    <!-- DESCRIÇÃO -->
+    <p class="descricao">
+        Confira os dados abaixo antes de realizar o pagamento.
+    </p>
+
+
+    <!-- BENEFICIÁRIO -->
+    <div class="campo">
+
+        <label>
+            Beneficiário
+        </label>
+
+        <div class="caixa">
+
+            <span>
+                CLEUDAZIO ALVES DE LIMA
+            </span>
+
+        </div>
+
+    </div>
+
+
+    <!-- TIPO DE CHAVE -->
+    <div class="campo">
+
+        <label>
+            Tipo de chave
+        </label>
+
+        <div class="caixa">
+
+            <span>
+                E-MAIL
+            </span>
+
+        </div>
+
+    </div>
+
+
+    <!-- CHAVE PIX -->
+    <div class="campo">
+
+        <label>
+            Chave PIX
+        </label>
+
+        <div class="chave">
+
+            <span
+                id="chavePix"
+                class="chave-texto"
+            >
+                cleudazio@gmail.com
+            </span>
+
+
+            <!-- BOTÃO COPIAR CHAVE -->
+            <button
+                type="button"
+                onclick="copiarChave()"
+                aria-label="Copiar chave PIX"
+                title="Copiar chave PIX"
+            >
+
+                <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="22"
+                    height="22"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                >
+
+                    <rect
+                        x="9"
+                        y="9"
+                        width="13"
+                        height="13"
+                        rx="2"
+                    ></rect>
+
+                    <path
+                        d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"
+                    ></path>
+
+                </svg>
+
+            </button>
+
+        </div>
+
+    </div>
+
+
+    <!-- BANCO -->
+    <div class="campo">
+
+        <label>
+            Banco de destino
+        </label>
+
+        <div class="caixa">
+
+            <span>
+                NUBANK
+            </span>
+
+        </div>
+
+    </div>
+
+
+    <!-- VALOR -->
+    <div class="campo">
+
+        <label for="valor">
+            Valor do pagamento
+        </label>
+
+        <div class="valor-area">
+
+            <span class="simbolo">
+                R$
+            </span>
+
+            <input
+                type="text"
+                id="valor"
+                inputmode="decimal"
+                placeholder="0,00"
+                autocomplete="off"
+            >
+
+        </div>
+
+    </div>
+
+
+    <!-- BOTÃO GERAR PIX -->
+    <button
+        type="button"
+        class="botao-gerar"
+        onclick="gerarPix()"
+    >
+        GERAR PIX
+    </button>
+
+
+    <!-- RESULTADO DO PIX -->
+    <div
+        id="resultado"
+        class="resultado"
+    >
+
+
+        <!-- QR CODE -->
+        <div
+            id="qrcode"
+            class="qrcode"
+        ></div>
+
+
+        <!-- VALOR GERADO -->
+        <div
+            id="valorGerado"
+            class="valor-gerado"
+        ></div>
+
+
+        <!-- PIX COPIA E COLA -->
+        <div class="copia-cola-titulo">
+
+            PIX Copia e Cola
+
+        </div>
+
+
+        <div class="copia-cola">
+
+            <div
+                id="pixCopiaCola"
+                class="pix-texto"
+            ></div>
+
+
+            <!-- BOTÃO COPIAR PIX -->
+            <button
+                type="button"
+                onclick="copiarPix()"
+                class="botao-copiar"
+                aria-label="Copiar Pix Copia e Cola"
+                title="Copiar Pix Copia e Cola"
+            >
+
+                <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="21"
+                    height="21"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                >
+
+                    <rect
+                        x="9"
+                        y="9"
+                        width="13"
+                        height="13"
+                        rx="2"
+                    ></rect>
+
+                    <path
+                        d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"
+                    ></path>
+
+                </svg>
+
+            </button>
+
+        </div>
+
+    </div>
+
+
+    <!-- MENSAGEM -->
+    <div
+        id="mensagem"
+        aria-live="polite"
+    ></div>
+
+
+</div>
+
+
+<!-- BIBLIOTECA QR CODE -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+
+
+<!-- NOSSO JAVASCRIPT -->
+<script src="./script.js?v=2"></script>
+
+
+</body>
+
+</html>
 
