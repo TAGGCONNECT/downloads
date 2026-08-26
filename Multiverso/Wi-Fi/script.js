@@ -1,8 +1,8 @@
 const wifi = {
 
-    rede: "\brisa-multiverso",
+    rede: "brisa-MultiversoSeven",
 
-    senha: "Clientevip1"
+    senha: "bmzjrorh"
 
 };
 
