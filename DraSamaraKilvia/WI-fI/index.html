@@ -1,0 +1,95 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#f7f0e9">
+
+  <title>Wi-Fi | Dra. Samara Kílvia</title>
+  <meta name="description" content="Acesse a rede Wi-Fi da Dra. Samara Kílvia.">
+
+  <link rel="stylesheet" href="style.css">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+</head>
+
+<body>
+  <main class="wifi-container">
+
+    <div class="brand-symbol">
+      <i class="fa-solid fa-wifi"></i>
+    </div>
+
+    <p class="eyebrow">SEJA BEM-VINDA</p>
+
+    <h1>Conecte-se</h1>
+
+    <p class="subtitle">
+      Fique à vontade! Acesse nossa rede Wi-Fi.
+    </p>
+
+    <section class="wifi-card">
+
+      <div class="info-label">
+        <i class="fa-solid fa-signal"></i>
+        <span>Rede Wi-Fi</span>
+      </div>
+
+      <div class="info-value">
+        <span id="wifi-rede">Carregando...</span>
+      </div>
+
+      <div class="card-divider"></div>
+
+      <div class="info-label">
+        <i class="fa-solid fa-lock"></i>
+        <span>Senha de acesso</span>
+      </div>
+
+      <div class="password-row">
+        <span id="wifi-senha">••••••••</span>
+
+        <button
+          type="button"
+          id="copiar-senha"
+          class="copy-button"
+          aria-label="Copiar senha do Wi-Fi"
+          title="Copiar senha"
+        >
+          <i class="fa-regular fa-copy"></i>
+        </button>
+      </div>
+
+      <button type="button" id="copiar-conectar" class="connect-button">
+        <i class="fa-regular fa-copy"></i>
+        Copiar senha do Wi-Fi
+      </button>
+
+      <p id="mensagem" role="status" aria-live="polite">
+        Toque no botão para copiar a senha e conectar-se à rede.
+      </p>
+
+    </section>
+
+    <p class="footer-message">
+      Cuidar de você também está nos detalhes.
+    </p>
+
+    <div class="footer-brand">
+      <span>Desenvolvido por</span>
+      <strong>TAGG CONNECT</strong>
+    </div>
+
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>
+
