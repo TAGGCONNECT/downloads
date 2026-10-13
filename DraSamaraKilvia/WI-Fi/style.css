@@ -1,0 +1,230 @@
+
+:root {
+  --chocolate: #593d38;
+  --chocolate-dark: #402b28;
+  --cream: #f7f0e9;
+  --beige: #e9d9cb;
+  --pink: #e8c9ce;
+  --gold: #b18a55;
+  --text: #4c3834;
+  --muted: #8a7770;
+  --white: #ffffff;
+  --success: #54775c;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  min-height: 100vh;
+  min-height: 100dvh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 28px 18px;
+  background:
+    radial-gradient(circle at top right, #f0dfe0 0, transparent 38%),
+    var(--cream);
+  color: var(--text);
+  font-family: 'Montserrat', sans-serif;
+}
+
+.wifi-container {
+  width: 100%;
+  max-width: 410px;
+  text-align: center;
+}
+
+.brand-symbol {
+  width: 76px;
+  height: 76px;
+  margin: 0 auto 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: var(--chocolate);
+  color: var(--white);
+  font-size: 29px;
+  box-shadow: 0 8px 24px rgba(89, 61, 56, 0.16);
+}
+
+.eyebrow {
+  margin-bottom: 10px;
+  color: var(--gold);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 3px;
+}
+
+h1 {
+  color: var(--chocolate);
+  font-size: clamp(30px, 8vw, 38px);
+  font-weight: 700;
+  letter-spacing: -1.3px;
+}
+
+.subtitle {
+  max-width: 300px;
+  margin: 12px auto 27px;
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.8;
+}
+
+.wifi-card {
+  padding: 26px 22px 22px;
+  border: 1px solid rgba(177, 138, 85, 0.25);
+  border-radius: 22px;
+  background: var(--white);
+  text-align: left;
+  box-shadow: 0 16px 45px rgba(89, 61, 56, 0.08);
+}
+
+.info-label {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.info-label i {
+  color: var(--gold);
+  font-size: 14px;
+}
+
+.info-value {
+  padding: 12px 0 17px;
+  overflow-wrap: anywhere;
+  color: var(--chocolate);
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.card-divider {
+  height: 1px;
+  margin: 0 0 19px;
+  background: #eee5df;
+}
+
+.password-row {
+  min-height: 49px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 8px 0 17px;
+  color: var(--chocolate);
+  font-size: 17px;
+  font-weight: 600;
+  overflow-wrap: anywhere;
+}
+
+.copy-button {
+  flex: 0 0 42px;
+  width: 42px;
+  height: 42px;
+  border: 1px solid var(--beige);
+  border-radius: 12px;
+  background: var(--cream);
+  color: var(--chocolate);
+  font-size: 16px;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.2s;
+}
+
+.copy-button:hover {
+  background: var(--pink);
+}
+
+.copy-button:active,
+.connect-button:active {
+  transform: scale(0.98);
+}
+
+.connect-button {
+  width: 100%;
+  min-height: 49px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 13px 16px;
+  border: none;
+  border-radius: 13px;
+  background: var(--chocolate);
+  color: var(--white);
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.2s;
+}
+
+.connect-button:hover {
+  background: var(--chocolate-dark);
+}
+
+#mensagem {
+  min-height: 36px;
+  margin-top: 15px;
+  color: var(--muted);
+  font-size: 11px;
+  line-height: 1.7;
+  text-align: center;
+}
+
+#mensagem.sucesso {
+  color: var(--success);
+  font-weight: 600;
+}
+
+#mensagem.erro {
+  color: #a13e45;
+  font-weight: 600;
+}
+
+.footer-message {
+  margin-top: 28px;
+  color: var(--chocolate);
+  font-size: 12px;
+  font-style: italic;
+  line-height: 1.8;
+}
+
+.footer-brand {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  margin-top: 30px;
+  color: var(--muted);
+  font-size: 9px;
+  letter-spacing: 1px;
+}
+
+.footer-brand strong {
+  color: var(--chocolate);
+  font-size: 11px;
+  letter-spacing: 2px;
+}
+
+button:focus-visible {
+  outline: 3px solid var(--gold);
+  outline-offset: 3px;
+}
+
+@media (max-width: 360px) {
+  .wifi-card {
+    padding: 22px 17px 18px;
+  }
+
+  .info-value,
+  .password-row {
+    font-size: 15px;
+  }
+}
